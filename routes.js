@@ -1,7 +1,9 @@
 const responseUtils = require('./utils/responseUtils');
 const { acceptsJson, isJson, parseBodyJson } = require('./utils/requestUtils');
 const { renderPublic } = require('./utils/render');
-const { emailInUse, getAllUsers, saveNewUser, validateUser } = require('./utils/users');
+const { emailInUse, getAllUsers, saveNewUser, validateUser, generateId } = require('./utils/users');
+const fs = require('fs');
+const { sendJson } = require('./utils/responseUtils');
 
 /**
  * Known API routes and their allowed methods
@@ -92,6 +94,9 @@ const handleRequest = async (request, response) => {
   // GET all users
   if (filePath === '/api/users' && method.toUpperCase() === 'GET') {
     // TODO: 8.3 Return all users as JSON
+    var data = fs.readFileSync("users.json", 'utf8');
+    var jsonData = JSON.parse(data);
+    return responseUtils.sendJson(response, jsonData, 200);
     // TODO: 8.4 Add authentication (only allowed to users with role "admin")
     throw new Error('Not Implemented');
   }
@@ -104,8 +109,27 @@ const handleRequest = async (request, response) => {
     }
 
     // TODO: 8.3 Implement registration
+    parseBodyJson(request).then((data) => {
+      if(!data.email || !data.name || !data.password) {
+        newData = { ...data, error:'ERROR'};
+        response.writeHead(400, {'Accept':'application/json', 'Content-Type': 'application/json'})
+        response.write(JSON.stringify(newData));
+        return response.end();
+      }
+      const users = getAllUsers();
+      const emails = users.map(u => u.email);
+      if(emails.includes(data.email)) {
+        newData = { ...data, error:'ERROR'};
+        response.writeHead(400, {'Accept':'application/json', 'Content-Type': 'application/json'})
+        response.write(JSON.stringify(newData));
+        return response.end();
+      }
+      newData = {'_id':'',...data, 'role':'customer'}
+      return sendJson(response, newData, 201);
+    }).catch((err) => {
+      console.log(err);
+    })
     // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
-    throw new Error('Not Implemented');
   }
 };
 
