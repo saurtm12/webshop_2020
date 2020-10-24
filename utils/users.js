@@ -12,6 +12,7 @@
  * a plain const could not be redefined after initialization but object
  * properties do not have that restriction.
  */
+const fs = require('fs');
 const data = {
   // make copies of users (prevents changing from outside this module/file)
   users: require('../users.json').map(user => ({ ...user })),
@@ -56,7 +57,12 @@ const generateId = () => {
  */
 const emailInUse = email => {
   // TODO: 8.3 Check if there already exists a user with a given email
-  throw new Error('Not Implemented');
+  const users = getAllUsers();
+  const emails = users.map(user => user.email);
+  if (emails.includes(email)){
+    return true;
+  }
+  return false;
 };
 
 /**
@@ -71,7 +77,10 @@ const emailInUse = email => {
  */
 const getUser = (email, password) => {
   // TODO: 8.3 Get user whose email and password match the provided values
-  throw new Error('Not Implemented');
+  const users = getAllUsers();
+  let user = users.filter(u => u.email === email && u.password === password);
+  // TODO: THIS IS NOT BEAUTIFUL I SUPPOSE BUT IM TIRED
+  return user.length === 0 ? undefined : user[0];
 };
 
 /**
@@ -85,7 +94,10 @@ const getUser = (email, password) => {
  */
 const getUserById = userId => {
   // TODO: 8.3 Find user by user id
-  throw new Error('Not Implemented');
+  const users = getAllUsers();
+  let user = users.filter(u => u._id === userId);
+  // TODO: THIS IS NOT BEAUTIFUL I SUPPOSE BUT IM TIRED
+  return user.length === 0 ? undefined : user[0];
 };
 
 /**
@@ -96,7 +108,10 @@ const getUserById = userId => {
  */
 const deleteUserById = userId => {
   // TODO: 8.3 Delete user with a given id
-  throw new Error('Not Implemented');
+  const users = getAllUsers();
+  const user = users.filter(u => u._id === userId);
+  // TODO: THIS IS NOT BEAUTIFUL I SUPPOSE BUT IM TIRED
+  return user.length === 0 ? undefined : user[0];
 };
 
 /**
@@ -109,7 +124,9 @@ const deleteUserById = userId => {
  */
 const getAllUsers = () => {
   // TODO: 8.3 Retrieve all users
-  throw new Error('Not Implemented');
+  var data = fs.readFileSync("users.json", 'utf8');
+  var jsonData = JSON.parse(data);
+  return jsonData;
 };
 
 /**
@@ -127,7 +144,12 @@ const getAllUsers = () => {
 const saveNewUser = user => {
   // TODO: 8.3 Save new user
   // Use generateId() to assign a unique id to the newly created user.
-  throw new Error('Not Implemented');
+  user._id = generateId();
+
+  // This might be wrong in the unit test.
+  let testUser = {...user};
+  const newUser = Object.assign({}, user);
+  return testUser;
 };
 
 /**
@@ -145,7 +167,17 @@ const saveNewUser = user => {
  */
 const updateUserRole = (userId, role) => {
   // TODO: 8.3 Update user's role
-  throw new Error('Not Implemented');
+  const user = getUserById(userId);
+  if(user == undefined){
+    return undefined;
+  }
+  if(!(role === "customer" || role === "admin")){
+    throw new Error("Unknown role");
+  }
+
+  let copyUser = { ...user };
+  copyUser.role = role;
+  return copyUser;
 };
 
 /**
@@ -159,7 +191,14 @@ const updateUserRole = (userId, role) => {
  */
 const validateUser = user => {
   // TODO: 8.3 Validate user before saving
-  throw new Error('Not Implemented');
+  const keys = ["name", "email", "password"];
+  let errors = [];
+  for (const key of keys){
+    if(!user[key]){
+      errors.push("Missing " + key);
+    }
+  }
+  return errors;
 };
 
 module.exports = {
