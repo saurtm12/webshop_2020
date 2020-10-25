@@ -29,8 +29,8 @@ const acceptsJson = request => {
   if(!request.headers.accept){
     return acceptsjson;
   }
-  var acceptArray = request.headers.accept.split(',');
-  for(var a of acceptArray) {
+  const acceptArray = request.headers.accept.split(',');
+  for(const a of acceptArray) {
     if(a.includes("*/*") || a.includes('application/json')) {
       acceptsjson = true;
       break;
@@ -52,7 +52,6 @@ const isJson = request => {
     return true;
   }
   return false;
-  throw new Error('Not Implemented');
 };
 
 /**

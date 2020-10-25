@@ -59,7 +59,7 @@ const matchUserId = url => {
   return matchIdRoute(url, 'users');
 };
 
-const handleRequest = async (request, response) => {
+const handleRequest = (request, response) => {
   const { url, method, headers } = request;
   const filePath = new URL(url, `http://${headers.host}`).pathname;
 
@@ -94,11 +94,10 @@ const handleRequest = async (request, response) => {
   // GET all users
   if (filePath === '/api/users' && method.toUpperCase() === 'GET') {
     // TODO: 8.3 Return all users as JSON
-    var data = fs.readFileSync("users.json", 'utf8');
-    var jsonData = JSON.parse(data);
+    const data = fs.readFileSync("users.json", 'utf8');
+    const jsonData = JSON.parse(data);
     return responseUtils.sendJson(response, jsonData, 200);
     // TODO: 8.4 Add authentication (only allowed to users with role "admin")
-    throw new Error('Not Implemented');
   }
 
   // register new user
@@ -110,25 +109,25 @@ const handleRequest = async (request, response) => {
 
     // TODO: 8.3 Implement registration
     parseBodyJson(request).then((data) => {
-      if(!data.email || !data.name || !data.password) {
-        newData = { ...data, error:'ERROR'};
-        response.writeHead(400, {'Accept':'application/json', 'Content-Type': 'application/json'})
+      if (!data.email || !data.name || !data.password) {
+        const newData = { ...data, error: 'ERROR' };
+        response.writeHead(400, { 'Accept': 'application/json', 'Content-Type': 'application/json' });
         response.write(JSON.stringify(newData));
         return response.end();
       }
       const users = getAllUsers();
       const emails = users.map(u => u.email);
-      if(emails.includes(data.email)) {
-        newData = { ...data, error:'ERROR'};
-        response.writeHead(400, {'Accept':'application/json', 'Content-Type': 'application/json'})
+      if (emails.includes(data.email)) {
+        const newData = { ...data, error: 'ERROR' };
+        response.writeHead(400, { 'Accept': 'application/json', 'Content-Type': 'application/json' });
         response.write(JSON.stringify(newData));
         return response.end();
       }
-      newData = {'_id':'',...data, 'role':'customer'}
+      const newData = { '_id': '', ...data, 'role': 'customer' };
       return sendJson(response, newData, 201);
     }).catch((err) => {
       console.log(err);
-    })
+    });
     // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
   }
 };

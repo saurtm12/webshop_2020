@@ -78,7 +78,7 @@ const emailInUse = email => {
 const getUser = (email, password) => {
   // TODO: 8.3 Get user whose email and password match the provided values
   const users = getAllUsers();
-  let user = users.filter(u => u.email === email && u.password === password);
+  const user = users.filter(u => u.email === email && u.password === password);
   // TODO: THIS IS NOT BEAUTIFUL I SUPPOSE BUT IM TIRED
   return user.length === 0 ? undefined : user[0];
 };
@@ -95,7 +95,7 @@ const getUser = (email, password) => {
 const getUserById = userId => {
   // TODO: 8.3 Find user by user id
   const users = getAllUsers();
-  let user = users.filter(u => u._id === userId);
+  const user = users.filter(u => u._id === userId);
   // TODO: THIS IS NOT BEAUTIFUL I SUPPOSE BUT IM TIRED
   return user.length === 0 ? undefined : user[0];
 };
@@ -124,8 +124,8 @@ const deleteUserById = userId => {
  */
 const getAllUsers = () => {
   // TODO: 8.3 Retrieve all users
-  var data = fs.readFileSync("users.json", 'utf8');
-  var jsonData = JSON.parse(data);
+  const data = fs.readFileSync("users.json", 'utf8');
+  const jsonData = JSON.parse(data);
   return jsonData;
 };
 
@@ -147,8 +147,8 @@ const saveNewUser = user => {
   user._id = generateId();
 
   // This might be wrong in the unit test.
-  let testUser = {...user};
-  const newUser = Object.assign({}, user);
+  const testUser = {...user};
+  const newUser = { ...user};
   return testUser;
 };
 
@@ -168,14 +168,14 @@ const saveNewUser = user => {
 const updateUserRole = (userId, role) => {
   // TODO: 8.3 Update user's role
   const user = getUserById(userId);
-  if(user == undefined){
+  if(user === undefined){
     return undefined;
   }
   if(!(role === "customer" || role === "admin")){
     throw new Error("Unknown role");
   }
 
-  let copyUser = { ...user };
+  const copyUser = { ...user };
   copyUser.role = role;
   return copyUser;
 };
@@ -192,10 +192,10 @@ const updateUserRole = (userId, role) => {
 const validateUser = user => {
   // TODO: 8.3 Validate user before saving
   const keys = ["name", "email", "password"];
-  let errors = [];
+  const errors = [];
   for (const key of keys){
     if(!user[key]){
-      errors.push("Missing " + key);
+      errors.push(`Missing ${ key}`);
     }
   }
   return errors;
