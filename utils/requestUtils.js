@@ -13,7 +13,7 @@ const getCredentials = request => {
   //       https://stackabuse.com/encoding-and-decoding-base64-strings-in-node-js/
   
   const authorization = request.headers.authorization;
-  if (authorization === undefined || authorization === '' || !authorization.startsWith('Basic')
+  if (authorization === undefined || authorization === '' || !authorization.startsWith('Basic'))
   {
     return null;
   } 
