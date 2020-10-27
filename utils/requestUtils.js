@@ -17,7 +17,7 @@ const getCredentials = request => {
   {
     return null;
   } 
-  const credentials = authorization.split(" ")[1];
+  const credentials = Buffer.from(authorization.split(" ")[1],"base64").toString();
   return credentials.split(":");
 };
 
