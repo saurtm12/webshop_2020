@@ -1,10 +1,10 @@
 const responseUtils = require('./utils/responseUtils');
-const { acceptsJson, isJson, parseBodyJson } = require('./utils/requestUtils');
+const { acceptsJson, isJson, parseBodyJson, getCredentials} = require('./utils/requestUtils');
 const { renderPublic } = require('./utils/render');
-const { emailInUse, getAllUsers, saveNewUser, validateUser, generateId } = require('./utils/users');
+const { emailInUse, getAllUsers, saveNewUser, validateUser, generateId, getUser, getUserById } = require('./utils/users');
 const fs = require('fs');
-const { sendJson } = require('./utils/responseUtils');
-
+const { sendJson , basicAuthChallenge} = require('./utils/responseUtils');
+const { userInfo } = require('os');
 /**
  * Known API routes and their allowed methods
  *
@@ -72,7 +72,44 @@ const handleRequest = (request, response) => {
   if (matchUserId(filePath)) {
     // TODO: 8.5 Implement view, update and delete a single user by ID (GET, PUT, DELETE)
     // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
-    throw new Error('Not Implemented');
+    authorization = headers.authorization;
+    const credential = getCredentials(request);
+    const id = filePath.split('/')[3];
+    if (credential !== null)
+    {
+      const authorizedUser = getUser(credential[0],credential[1]);
+      if (authorizedUser === undefined)
+      {
+        basicAuthChallenge(response);
+      }
+      else if (authorizedUser['role'] !== 'admin')
+      {
+        response.writeHead(403, {'WWW-Authenticate' : 'Basic'});
+        response.end();
+      }
+      else 
+      {
+        if (method.toUpperCase() === 'GET')
+        {
+          getUserInfo = getUserById(id);
+          if (userInfo)
+          {
+            response.writeHead(200, {'Content-type' : 'application/json'});
+            response.write(JSON.stringify(getUserInfo));
+            response.end();
+          }
+          if (!userInfo)
+          {
+            response.writeHead(404, {'Content-type' : 'application/json'});
+            response.end();
+          }
+        }
+      }
+    }
+    else
+    {
+      basicAuthChallenge(response);
+    }
   }
 
   // Default to 404 Not Found if unknown url
