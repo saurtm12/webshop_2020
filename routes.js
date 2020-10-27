@@ -94,10 +94,15 @@ const handleRequest = (request, response) => {
   // GET all users
   if (filePath === '/api/users' && method.toUpperCase() === 'GET') {
     // TODO: 8.3 Return all users as JSON
-    const data = fs.readFileSync("users.json", 'utf8');
-    const jsonData = JSON.parse(data);
-    return responseUtils.sendJson(response, jsonData, 200);
     // TODO: 8.4 Add authentication (only allowed to users with role "admin")
+    const currentUser = getCurrentUser(request);
+    if (currentUser['role'] === "admin")
+    {
+      const data = fs.readFileSync("users.json", 'utf8');
+      const jsonData = JSON.parse(data);
+      return responseUtils.sendJson(response, jsonData, 200);
+    }
+    return {}
   }
 
   // register new user
