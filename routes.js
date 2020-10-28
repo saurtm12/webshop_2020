@@ -6,8 +6,6 @@ const fs = require('fs');
 const { sendJson , basicAuthChallenge} = require('./utils/responseUtils');
 const { userInfo } = require('os');
 const { parse } = require('path');
-const btoa = require('btoa');
-const atob = require('atob');
 const { getCurrentUser } = require('./auth/auth');
 /**
  * Known API routes and their allowed methods
@@ -165,8 +163,7 @@ const handleRequest = (request, response) => {
       return responseUtils.basicAuthChallenge(response);
     }
     var authHeadersArray = request.headers.authorization.split(" ");
-    console.log(authHeadersArray);
-    if (btoa(atob(authHeadersArray[1])) !== authHeadersArray[1]){
+    if(Buffer.from(authHeadersArray[1], 'base64').toString('base64') !== authHeadersArray[1]) {
       return responseUtils.basicAuthChallenge(response);
     }
     const current = getCurrentUser(request);
