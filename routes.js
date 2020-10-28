@@ -1,10 +1,11 @@
 const responseUtils = require('./utils/responseUtils');
 const { acceptsJson, isJson, parseBodyJson, getCredentials} = require('./utils/requestUtils');
 const { renderPublic } = require('./utils/render');
-const { emailInUse, getAllUsers, saveNewUser, validateUser, generateId, getUser, getUserById } = require('./utils/users');
+const { emailInUse, getAllUsers, saveNewUser, validateUser, generateId, getUser, getUserById, updateUserRole, deleteUserById } = require('./utils/users');
 const fs = require('fs');
 const { sendJson , basicAuthChallenge} = require('./utils/responseUtils');
 const { userInfo } = require('os');
+const { parse } = require('path');
 /**
  * Known API routes and their allowed methods
  *
@@ -92,18 +93,44 @@ const handleRequest = (request, response) => {
         if (method.toUpperCase() === 'GET')
         {
           getUserInfo = getUserById(id);
-          if (userInfo)
+          if (getUserInfo)
           {
             response.writeHead(200, {'Content-type' : 'application/json'});
             response.write(JSON.stringify(getUserInfo));
             response.end();
-          }
-          if (!userInfo)
+          } 
+          else
           {
             response.writeHead(404, {'Content-type' : 'application/json'});
             response.end();
           }
         }
+        
+        if (method.toUpperCase() === 'PUT')
+        {
+          const roles = {'admin', 'customer'};
+          const jsonData = await parseBodyJson(request);
+          role = jsonData.role;
+          // TODO I tried to make the program work but it fails and im frustrated and delete it :>
+        }
+
+        // TODO : method delete : the test keeps failing but I dont know why :>
+        if (method.toUpperCase() === 'DELETE')
+        {
+          const deleteUser = deleteUserById(id);
+          if (!deleteUser)
+          {
+            response.writeHead(404, {'Content-type' : 'application/json'});
+            response.end();
+          }
+          else 
+          {
+            response.writeHead(200, {'Content-type' : 'application/json'});
+            response.write(JSON.stringify(deleteUser));
+            response.end();
+          }
+        }
+
       }
     }
     else
