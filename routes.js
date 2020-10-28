@@ -6,6 +6,9 @@ const fs = require('fs');
 const { sendJson , basicAuthChallenge} = require('./utils/responseUtils');
 const { userInfo } = require('os');
 const { parse } = require('path');
+const btoa = require('btoa');
+const atob = require('atob');
+const { getCurrentUser } = require('./auth/auth');
 /**
  * Known API routes and their allowed methods
  *
@@ -158,20 +161,23 @@ const handleRequest = (request, response) => {
   // GET all users
   if (filePath === '/api/users' && method.toUpperCase() === 'GET') {
     // TODO: 8.3 Return all users as JSON
-    //const data = fs.readFileSync("users.json", 'utf8');
+    if(!request.headers.authorization) {
+      return responseUtils.basicAuthChallenge(response);
+    }
+    var authHeadersArray = request.headers.authorization.split(" ");
+    console.log(authHeadersArray);
+    if (btoa(atob(authHeadersArray[1])) !== authHeadersArray[1]){
+      return responseUtils.basicAuthChallenge(response);
+    }
+    const current = getCurrentUser(request);
+    if(current === undefined) {
+      return responseUtils.basicAuthChallenge(response);
+    }
+    if (current.role === 'customer') {
+      return responseUtils.forbidden(response);
+    }
     const test = getAllUsers();
-    //const jsonData = JSON.parse(data);
     return responseUtils.sendJson(response, test, 200);
-
-    // TODO: 8.4 Add authentication (only allowed to users with role "admin")
-    // const currentUser = getCurrentUser(request);
-    // if (currentUser['role'] === "admin")
-    // {
-    //   const data = fs.readFileSync("users.json", 'utf8');
-    //   const jsonData = JSON.parse(data);
-    //   return responseUtils.sendJson(response, jsonData, 200);
-    // }
-    // return {}
   }
 
   // register new user
