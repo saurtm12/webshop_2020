@@ -56,27 +56,4 @@ window.onload = function() {
             usersContainer.append(clone);
         }
     });
-}
-
-// getJSON("/api/users").then(users => {
-//     // Do something with the json
-//     console.log(users);
-//     //users = JSON.parse(users);
-//     var template = document.getElementById("user-template");
-//     for(user of users) {
-//         var clone = template.content.cloneNode(true);
-//         var id = clone.querySelector("h3");
-//         var email = clone.querySelector("p");
-//         var role = clone.querySelectorAll("p")[1];
-
-//         id.innerHTML = user.name;
-//         id.id = `name-${user._id}`
-//         email.innerHTML = user.email;
-//         email.id = `email-${user._id}`;
-//         role.innerHTML = user.role;
-//         role.id = `role-${user._id}`;
-
-//         const usersContainer =  document.getElementById("users-container");
-//         usersContainer.append(clone);
-//     }
-// });
+};

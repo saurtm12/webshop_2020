@@ -56,10 +56,6 @@ const postOrPutJSON = async (url, method, data = {}) => {
     return res;
   });
   return x;
-  // return new Promise(function (res, rej) {
-  //   res(JSON.stringify(data));
-  // });
-  
 };
 
 /**

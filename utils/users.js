@@ -154,7 +154,6 @@ const saveNewUser = user => {
     'role': user.role === undefined ? 'customer' : user.role 
   };
   data.users.push(newUser);
-  console.log(data.users);
   return newUser;
 };
 
@@ -181,15 +180,10 @@ const updateUserRole = (userId, role) => {
     throw new Error("Unknown role");
   }
   const objIndex = data.users.findIndex((obj => obj._id === userId));
-  data.users[4].role = role;
-  console.log(data.users[4]);
-
 
   let dataUser = data.users[objIndex];
-  const copyUser = { ...dataUser };
-  copyUser.role = role;
-  data.users.splice(objIndex, 1, copyUser);
-  //return copyUser;
+  dataUser.role = role;
+  data.users.splice(objIndex, 1, dataUser);
   return {...data.users[objIndex]};
 };
 
