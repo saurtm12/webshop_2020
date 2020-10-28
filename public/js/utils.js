@@ -13,14 +13,18 @@
  *
  *   getJSON("/api/users").then(json => {
  *     // Do something with the json
- *   })
+ *   }) 
  *
  * @param {string} url resource url on the server
  * @returns {Promise<*>} promise that resolves to the parsed JSON
  */
-const getJSON = async url => {
+
+const getJSON = async (url) => {
   // TODO: 8.3 Implement this
-  throw new Error('Not Implemented');
+  const x = fetch(url).then(res => {
+    return res.json();
+  });
+  return x;
 };
 
 /**
@@ -41,7 +45,21 @@ const postOrPutJSON = async (url, method, data = {}) => {
   }
 
   // TODO: 8.3 Implement this
-  throw new Error('Not Implemented');
+  console.log(method);
+  const x = fetch(url, {
+    method: method,
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: data
+  }).then(res => {
+    return res;
+  });
+  return x;
+  // return new Promise(function (res, rej) {
+  //   res(JSON.stringify(data));
+  // });
+  
 };
 
 /**

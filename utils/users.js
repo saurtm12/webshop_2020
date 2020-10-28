@@ -108,8 +108,10 @@ const getUserById = userId => {
  */
 const deleteUserById = userId => {
   // TODO: 8.3 Delete user with a given id
-  const users = getAllUsers();
-  const user = users.filter(u => u._id === userId);
+  const aUsers = getAllUsers();
+  const user = aUsers.filter(u => u._id === userId);
+  const filteredUsers = data.users.filter(u => u._id !== userId);
+  data.users = filteredUsers;
   // TODO: THIS IS NOT BEAUTIFUL I SUPPOSE BUT IM TIRED
   return user.length === 0 ? undefined : user[0];
 };
@@ -124,9 +126,9 @@ const deleteUserById = userId => {
  */
 const getAllUsers = () => {
   // TODO: 8.3 Retrieve all users
-  const data = fs.readFileSync("users.json", 'utf8');
-  const jsonData = JSON.parse(data);
-  return jsonData;
+  const userData = data.users;
+  const returnedData = JSON.parse(JSON.stringify(userData));
+  return returnedData;
 };
 
 /**
@@ -144,12 +146,16 @@ const getAllUsers = () => {
 const saveNewUser = user => {
   // TODO: 8.3 Save new user
   // Use generateId() to assign a unique id to the newly created user.
-  user._id = generateId();
-
-  // This might be wrong in the unit test.
-  const testUser = {...user};
-  const newUser = { ...user};
-  return testUser;
+  const newUser = {
+    '_id': generateId(),
+    'email': user.email,
+    'name': user.name,
+    'password': user.password,
+    'role': user.role === undefined ? 'customer' : user.role 
+  };
+  data.users.push(newUser);
+  console.log(data.users);
+  return newUser;
 };
 
 /**
@@ -174,10 +180,12 @@ const updateUserRole = (userId, role) => {
   if(!(role === "customer" || role === "admin")){
     throw new Error("Unknown role");
   }
+  const objIndex = data.users.findIndex((obj => obj._id === userId));
+  data.users[4].role = role;
+  console.log(data.users[4]);
 
-  const copyUser = { ...user };
-  copyUser.role = role;
-  return copyUser;
+  data.users.splice(objIndex, 1, copyUser);
+  return {...data.users[objIndex]};
 };
 
 /**
@@ -197,6 +205,9 @@ const validateUser = user => {
     if(!user[key]){
       errors.push(`Missing ${ key}`);
     }
+  }
+  if(user.role !== undefined && user.role !== 'admin' && user.role !== 'customer'){
+    errors.push("Unknown role");
   }
   return errors;
 };

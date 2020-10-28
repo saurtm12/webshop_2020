@@ -108,8 +108,8 @@ const handleRequest = (request, response) => {
         
         if (method.toUpperCase() === 'PUT')
         {
-          const roles = {'admin', 'customer'};
-          const jsonData = await parseBodyJson(request);
+          //const roles = {'admin', 'customer'};
+          //const jsonData = await parseBodyJson(request);
           role = jsonData.role;
           // TODO I tried to make the program work but it fails and im frustrated and delete it :>
         }
@@ -158,15 +158,20 @@ const handleRequest = (request, response) => {
   // GET all users
   if (filePath === '/api/users' && method.toUpperCase() === 'GET') {
     // TODO: 8.3 Return all users as JSON
+    //const data = fs.readFileSync("users.json", 'utf8');
+    const test = getAllUsers();
+    //const jsonData = JSON.parse(data);
+    return responseUtils.sendJson(response, test, 200);
+
     // TODO: 8.4 Add authentication (only allowed to users with role "admin")
-    const currentUser = getCurrentUser(request);
-    if (currentUser['role'] === "admin")
-    {
-      const data = fs.readFileSync("users.json", 'utf8');
-      const jsonData = JSON.parse(data);
-      return responseUtils.sendJson(response, jsonData, 200);
-    }
-    return {}
+    // const currentUser = getCurrentUser(request);
+    // if (currentUser['role'] === "admin")
+    // {
+    //   const data = fs.readFileSync("users.json", 'utf8');
+    //   const jsonData = JSON.parse(data);
+    //   return responseUtils.sendJson(response, jsonData, 200);
+    // }
+    // return {}
   }
 
   // register new user
@@ -178,6 +183,7 @@ const handleRequest = (request, response) => {
 
     // TODO: 8.3 Implement registration
     parseBodyJson(request).then((data) => {
+      console.log(data);
       if (!data.email || !data.name || !data.password) {
         const newData = { ...data, error: 'ERROR' };
         response.writeHead(400, { 'Accept': 'application/json', 'Content-Type': 'application/json' });
@@ -193,6 +199,7 @@ const handleRequest = (request, response) => {
         return response.end();
       }
       const newData = { '_id': '', ...data, 'role': 'customer' };
+      saveNewUser(data);
       return sendJson(response, newData, 201);
     }).catch((err) => {
       console.log(err);
