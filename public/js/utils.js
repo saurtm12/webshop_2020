@@ -68,8 +68,18 @@ const postOrPutJSON = async (url, method, data = {}) => {
  * @returns {Promise<*>} promise that resolves to the parsed JSON
  */
 const deleteResourse = async url => {
+  const splittedUrl = url.split("/");
   // TODO: 8.5 Implement this
-  throw new Error('Not Implemented');
+  const x = fetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: splittedUrl[2]
+  }).then(res => {
+    return res;
+  });
+  return x;
 };
 
 /**

@@ -14,8 +14,10 @@
  *
  *       - Each cloned template fragment should be appended to <div id="users-container">
  *       - Use getJSON() function from utils.js to fetch user data from server
- *
- * TODO: 8.5 Updating/modifying and deleting existing users
+ */
+
+
+ /* TODO: 8.5 Updating/modifying and deleting existing users
  *       - Use postOrPutJSON() function from utils.js to send your data back to server
  *       - Use deleteResource() function from utils.js to delete users from server
  *       - Clicking "Delete" button of a user will delete the user and update the listing accordingly
@@ -33,6 +35,7 @@
  *       - Use createNotification() function from utils.js to create notifications
  */
 
+//document.getElementById("btnRegister").addEventListener('click', register);
 window.onload = function() {
     getJSON("/api/users").then(users => {
         // Do something with the json
@@ -42,6 +45,8 @@ window.onload = function() {
             var id = clone.querySelector("h3");
             var email = clone.querySelector("p");
             var role = clone.querySelectorAll("p")[1];
+            var modifyButton = clone.querySelector("button");
+            var deleteButton = clone.querySelectorAll("button")[1];
     
             id.innerHTML = user.name;
             id.id = `name-${user._id}`
@@ -49,9 +54,42 @@ window.onload = function() {
             email.id = `email-${user._id}`;
             role.innerHTML = user.role;
             role.id = `role-${user._id}`;
+            modifyButton.id = `modify-${user._id}`
+            deleteButton.id = `delete-${user._id}`
+
+            modifyButton.addEventListener('click', function(event){
+                remove(event);
+            })
+
+            deleteButton.addEventListener('click', function(event){
+                remove(event);
+            });
     
             const usersContainer =  document.getElementById("users-container");
             usersContainer.append(clone);
         }
     });
 };
+
+function modify(event){
+    console.log("TODO MODIFY");
+}
+
+function remove(event) {
+    let id = event.target.id;
+    let parsedId = id.split("-");
+    const userNames = document.getElementsByClassName("user-name");
+    let name = "";
+    for(let username of userNames) {
+        let userId = username.id;
+        if(userId.includes(parsedId[1])){
+            name = username.innerHTML;
+        }
+    }
+    deleteResourse("/api/users/" + parsedId[1] );
+    createNotification(`Deleted user ${name}`, "notifications-container", true);
+    const userContainer = document.getElementById("users-container");
+    const itemRow = event.path[1];
+    itemRow.remove();
+
+}

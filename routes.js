@@ -61,7 +61,7 @@ const matchUserId = url => {
   return matchIdRoute(url, 'users');
 };
 
-const handleRequest = (request, response) => {
+const handleRequest = async (request, response) => {
   const { url, method, headers } = request;
   const filePath = new URL(url, `http://${headers.host}`).pathname;
 
@@ -93,7 +93,7 @@ const handleRequest = (request, response) => {
       {
         if (method.toUpperCase() === 'GET')
         {
-          getUserInfo = getUserById(id);
+          const getUserInfo = getUserById(id);
           if (getUserInfo)
           {
             response.writeHead(200, {'Content-type' : 'application/json'});
@@ -109,9 +109,20 @@ const handleRequest = (request, response) => {
         
         if (method.toUpperCase() === 'PUT')
         {
+          const jsonData = await parseBodyJson(request);
+          if(jsonData.role === null || jsonData.role === undefined) {
+            return responseUtils.badRequest(response);
+          }
+          if(jsonData.role !== 'customer' && jsonData.role !== 'admin') {
+            return responseUtils.badRequest(response);
+          }
+          //const updatedUser = updateUserRole(jsonData._id, 'admin');
+          //console.log(updatedUser);
+          //return responseUtils.sendJson(response, updatedUser[0], 200);
+          
           //const roles = {'admin', 'customer'};
           //const jsonData = await parseBodyJson(request);
-          role = jsonData.role;
+          //role = jsonData.role;
           // TODO I tried to make the program work but it fails and im frustrated and delete it :>
         }
 
@@ -121,14 +132,11 @@ const handleRequest = (request, response) => {
           const deleteUser = deleteUserById(id);
           if (!deleteUser)
           {
-            response.writeHead(404, {'Content-type' : 'application/json'});
-            response.end();
+            return responseUtils.notFound(response);
           }
           else 
           {
-            response.writeHead(200, {'Content-type' : 'application/json'});
-            response.write(JSON.stringify(deleteUser));
-            response.end();
+            return responseUtils.sendJson(response, deleteUser, 200);
           }
         }
 
@@ -186,7 +194,6 @@ const handleRequest = (request, response) => {
 
     // TODO: 8.3 Implement registration
     parseBodyJson(request).then((data) => {
-      console.log(data);
       if (!data.email || !data.name || !data.password) {
         const newData = { ...data, error: 'ERROR' };
         response.writeHead(400, { 'Accept': 'application/json', 'Content-Type': 'application/json' });
