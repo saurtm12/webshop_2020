@@ -184,7 +184,12 @@ const updateUserRole = (userId, role) => {
   data.users[4].role = role;
   console.log(data.users[4]);
 
+
+  let dataUser = data.users[objIndex];
+  const copyUser = { ...dataUser };
+  copyUser.role = role;
   data.users.splice(objIndex, 1, copyUser);
+  //return copyUser;
   return {...data.users[objIndex]};
 };
 
