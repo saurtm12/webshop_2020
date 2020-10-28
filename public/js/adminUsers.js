@@ -36,8 +36,6 @@
 window.onload = function() {
     getJSON("/api/users").then(users => {
         // Do something with the json
-        console.log(users);
-        //users = JSON.parse(users);
         var template = document.getElementById("user-template");
         for(user of users) {
             var clone = template.content.cloneNode(true);
