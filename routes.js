@@ -3,7 +3,7 @@ const { acceptsJson, isJson, parseBodyJson, getCredentials} = require('./utils/r
 const { renderPublic } = require('./utils/render');
 const { emailInUse, getAllUsers, saveNewUser, validateUser, generateId, getUser, getUserById, updateUserRole, deleteUserById } = require('./utils/users');
 const fs = require('fs');
-const { sendJson , basicAuthChallenge} = require('./utils/responseUtils');
+const { sendJson, basicAuthChallenge} = require('./utils/responseUtils');
 const { userInfo } = require('os');
 const { parse } = require('path');
 const { getCurrentUser } = require('./auth/auth');
@@ -79,7 +79,7 @@ const handleRequest = async (request, response) => {
     const id = filePath.split('/')[3];
     if (credential !== null)
     {
-      const authorizedUser = getUser(credential[0],credential[1]);
+      const authorizedUser = getUser(credential[0], credential[1]);
       if (authorizedUser === undefined)
       {
         basicAuthChallenge(response);
@@ -170,7 +170,7 @@ const handleRequest = async (request, response) => {
     if(!request.headers.authorization) {
       return responseUtils.basicAuthChallenge(response);
     }
-    var authHeadersArray = request.headers.authorization.split(" ");
+    const authHeadersArray = request.headers.authorization.split(" ");
     if(Buffer.from(authHeadersArray[1], 'base64').toString('base64') !== authHeadersArray[1]) {
       return responseUtils.basicAuthChallenge(response);
     }

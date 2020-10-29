@@ -181,7 +181,7 @@ const updateUserRole = (userId, role) => {
   }
   const objIndex = data.users.findIndex((obj => obj._id === userId));
 
-  let dataUser = data.users[objIndex];
+  const dataUser = data.users[objIndex];
   dataUser.role = role;
   data.users.splice(objIndex, 1, dataUser);
   return {...data.users[objIndex]};

@@ -39,33 +39,33 @@
 window.onload = function() {
     getJSON("/api/users").then(users => {
         // Do something with the json
-        var template = document.getElementById("user-template");
+        const template = document.getElementById("user-template");
         for(user of users) {
-            var clone = template.content.cloneNode(true);
-            var id = clone.querySelector("h3");
-            var email = clone.querySelector("p");
-            var role = clone.querySelectorAll("p")[1];
-            var modifyButton = clone.querySelector("button");
-            var deleteButton = clone.querySelectorAll("button")[1];
+            const clone = template.content.cloneNode(true);
+            const id = clone.querySelector("h3");
+            const email = clone.querySelector("p");
+            const role = clone.querySelectorAll("p")[1];
+            const modifyButton = clone.querySelector("button");
+            const deleteButton = clone.querySelectorAll("button")[1];
     
             id.innerHTML = user.name;
-            id.id = `name-${user._id}`
+            id.id = `name-${user._id}`;
             email.innerHTML = user.email;
             email.id = `email-${user._id}`;
             role.innerHTML = user.role;
             role.id = `role-${user._id}`;
-            modifyButton.id = `modify-${user._id}`
-            deleteButton.id = `delete-${user._id}`
+            modifyButton.id = `modify-${user._id}`;
+            deleteButton.id = `delete-${user._id}`;
 
             modifyButton.addEventListener('click', function(event){
                 modify(event);
-            })
+            });
 
             deleteButton.addEventListener('click', function(event){
                 remove(event);
             });
     
-            const usersContainer =  document.getElementById("users-container");
+            const usersContainer = document.getElementById("users-container");
             usersContainer.append(clone);
         }
     });
@@ -73,9 +73,9 @@ window.onload = function() {
 
 function modify(event){
     console.log(event);
-    let buttonId = event.target.id;
-    let splittedButtonId = buttonId.split("-");
-    let userId = splittedButtonId[1];
+    const buttonId = event.target.id;
+    const splittedButtonId = buttonId.split("-");
+    const userId = splittedButtonId[1];
     console.log(userId);
 
     const userNames = document.getElementsByClassName("user-name");
@@ -85,20 +85,20 @@ function modify(event){
     let name = "";
     let email = "";
     let role = "";
-    for(let username of userNames) {
-        let innerId = username.id;
+    for(const username of userNames) {
+        const innerId = username.id;
         if(innerId.includes(userId[1])){
             name = username.innerHTML;
         }
     }
-    for(let uEmail of userEmails) {
-        let innerId = uEmail.id;
+    for(const uEmail of userEmails) {
+        const innerId = uEmail.id;
         if(innerId.includes(userId[1])){
             email = uEmail.innerHTML;
         }
     }
-    for(let uRole of userRoles) {
-        let innerId = uRole.id;
+    for(const uRole of userRoles) {
+        const innerId = uRole.id;
         if(innerId.includes(userId[1])){
             role = uRole.innerHTML;
             console.log(uRole.innerHTML);
@@ -112,40 +112,40 @@ function modify(event){
     const template = document.getElementById("form-template");
     const clone = template.content.cloneNode(true);
 
-    var form = clone.getElementById("edit-user-form");
+    const form = clone.getElementById("edit-user-form");
     //form.id = userId;
 
-    var header = form.querySelector("h2");
-    header.innerHTML = "Modify user " + name;
+    const header = form.querySelector("h2");
+    header.innerHTML = `Modify user ${ name}`;
 
-    var formGroups = form.getElementsByClassName("form-group");
+    const formGroups = form.getElementsByClassName("form-group");
 
-    var idGroup = formGroups[0];
-    var idInput = idGroup.querySelector("input");
+    const idGroup = formGroups[0];
+    const idInput = idGroup.querySelector("input");
     idInput.disabled = false;
     idInput.value = userId;
 
-    var nameGroup = formGroups[1];
-    var nameInput = nameGroup.querySelector("input");
+    const nameGroup = formGroups[1];
+    const nameInput = nameGroup.querySelector("input");
     nameInput.disabled = false;
     // DO THIS nameInput.value = name;
     // DONT DO BELOW, IT IS A HACK COS I THINK TEST IS FAILING...
     nameInput.value = "Customer";
 
-    var emailGroup = formGroups[2];
-    var emailInput = emailGroup.querySelector("input");
+    const emailGroup = formGroups[2];
+    const emailInput = emailGroup.querySelector("input");
     emailInput.disabled = false;
     //DO THIS emailInput.value = email;
     // DONT DO BELOW, IT IS A HACK COS I THINK TEST IS FAILING...
-    emailInput.value = "customer@email.com"
+    emailInput.value = "customer@email.com";
 
-    var roleGroup = formGroups[3];
-    var select = roleGroup.querySelectorAll("select");
+    const roleGroup = formGroups[3];
+    const select = roleGroup.querySelectorAll("select");
     console.log(role);
     select.selected = role;
     console.log(select);
 
-    var button = clone.getElementById("update-button");
+    const button = clone.getElementById("update-button");
     button.type = "button";
 
     button.addEventListener('click', function(event){
@@ -157,7 +157,7 @@ function modify(event){
             role: 'admin'
         };
         console.log(userData);
-        postOrPutJSON("/api/users/" + userId, "PUT", JSON.stringify(userData))
+        postOrPutJSON(`/api/users/${ userId}`, "PUT", JSON.stringify(userData));
     });
 
     modifyUserContainer.append(clone);
@@ -169,17 +169,17 @@ function submitForm(event, name) {
 }
 
 function remove(event) {
-    let id = event.target.id;
-    let parsedId = id.split("-");
+    const id = event.target.id;
+    const parsedId = id.split("-");
     const userNames = document.getElementsByClassName("user-name");
     let name = "";
-    for(let username of userNames) {
-        let userId = username.id;
+    for(const username of userNames) {
+        const userId = username.id;
         if(userId.includes(parsedId[1])){
             name = username.innerHTML;
         }
     }
-    deleteResourse("/api/users/" + parsedId[1] );
+    deleteResourse(`/api/users/${ parsedId[1]}` );
     createNotification(`Deleted user ${name}`, "notifications-container", true);
     const userContainer = document.getElementById("users-container");
     const itemRow = event.path[1];

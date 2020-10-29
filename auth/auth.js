@@ -16,7 +16,7 @@ const getCurrentUser = request => {
   const credential = getCredentials(request);
   if (credential !== null)
   {
-    const user = getUser(credential[0],credential[1]);
+    const user = getUser(credential[0], credential[1]);
     return user;
   }
   else 
