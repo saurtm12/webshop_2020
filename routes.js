@@ -109,7 +109,6 @@ const handleRequest = async (request, response) => {
             return responseUtils.notFound(response);
           }
         }
-        // TODO : method delete : the test keeps failing but I dont know why :>
         if (method.toUpperCase() === 'DELETE') {
           const deleteUser = deleteUserById(id);
           if (!deleteUser) {
