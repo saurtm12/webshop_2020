@@ -94,21 +94,14 @@ const handleRequest = async (request, response) => {
         if (method.toUpperCase() === 'GET')
         {
           const getUserInfo = getUserById(id);
-          if (getUserInfo)
-          {
-            response.writeHead(200, {'Content-type' : 'application/json'});
-            response.write(JSON.stringify(getUserInfo));
-            response.end();
-          } 
-          else
-          {
-            response.writeHead(404, {'Content-type' : 'application/json'});
-            response.end();
+          if (getUserInfo) {
+            return responseUtils.sendJson(response, getUserInfo, 200);
+          } else {
+            return responseUtils.notFound(response);
           }
         }
         
-        if (method.toUpperCase() === 'PUT')
-        {
+        if (method.toUpperCase() === 'PUT') {
           const jsonData = await parseBodyJson(request);
           if(jsonData.role === null || jsonData.role === undefined) {
             return responseUtils.badRequest(response);
@@ -127,23 +120,17 @@ const handleRequest = async (request, response) => {
         }
 
         // TODO : method delete : the test keeps failing but I dont know why :>
-        if (method.toUpperCase() === 'DELETE')
-        {
+        if (method.toUpperCase() === 'DELETE') {
           const deleteUser = deleteUserById(id);
-          if (!deleteUser)
-          {
+          if (!deleteUser) {
             return responseUtils.notFound(response);
-          }
-          else 
-          {
+          } else {
             return responseUtils.sendJson(response, deleteUser, 200);
           }
         }
 
       }
-    }
-    else
-    {
+    } else {
       basicAuthChallenge(response);
     }
   }
