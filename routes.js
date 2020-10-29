@@ -102,14 +102,12 @@ const handleRequest = async (request, response) => {
           if(jsonData.role !== 'customer' && jsonData.role !== 'admin') {
             return responseUtils.badRequest(response);
           }
-          //const updatedUser = updateUserRole(jsonData._id, 'admin');
-          //console.log(updatedUser);
-          //return responseUtils.sendJson(response, updatedUser[0], 200);
-          
-          //const roles = {'admin', 'customer'};
-          //const jsonData = await parseBodyJson(request);
-          //role = jsonData.role;
-          // TODO I tried to make the program work but it fails and im frustrated and delete it :>
+          const updatedUser = updateUserRole(id, jsonData.role);
+          if(updatedUser !== undefined) {
+            return responseUtils.sendJson(response, updatedUser, 200);
+          } else {
+            return responseUtils.notFound(response);
+          }
         }
         // TODO : method delete : the test keeps failing but I dont know why :>
         if (method.toUpperCase() === 'DELETE') {
