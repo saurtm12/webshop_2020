@@ -58,6 +58,7 @@ window.onload = function() {
             deleteButton.id = `delete-${user._id}`;
 
             modifyButton.addEventListener('click', function(event){
+                removeElement("modify-user", "edit-user-form");
                 modify(event);
             });
 
@@ -72,51 +73,43 @@ window.onload = function() {
 };
 
 function modify(event){
-    console.log(event);
     const buttonId = event.target.id;
     const splittedButtonId = buttonId.split("-");
     const userId = splittedButtonId[1];
-    console.log(userId);
 
     const userNames = document.getElementsByClassName("user-name");
     const userEmails = document.getElementsByClassName("user-email");
     const userRoles = document.getElementsByClassName("user-role");
-    console.log(userRoles);
     let name = "";
     let email = "";
     let role = "";
     for(const username of userNames) {
         const innerId = username.id;
-        if(innerId.includes(userId[1])){
+        if(innerId.includes(userId)){
             name = username.innerHTML;
         }
     }
     for(const uEmail of userEmails) {
         const innerId = uEmail.id;
-        if(innerId.includes(userId[1])){
+        if(innerId.includes(userId)){
             email = uEmail.innerHTML;
         }
     }
     for(const uRole of userRoles) {
         const innerId = uRole.id;
-        if(innerId.includes(userId[1])){
+        if(innerId.includes(userId)){
             role = uRole.innerHTML;
-            console.log(uRole.innerHTML);
         }
     }
 
-
-
     const modifyUserContainer = document.getElementById("modify-user");
-    //modifyUserContainer.id = userId;
     const template = document.getElementById("form-template");
     const clone = template.content.cloneNode(true);
 
     const form = clone.getElementById("edit-user-form");
-    //form.id = userId;
 
     const header = form.querySelector("h2");
-    header.innerHTML = `Modify user ${ name}`;
+    header.innerHTML = `Modify user ${name}`;
 
     const formGroups = form.getElementsByClassName("form-group");
 
@@ -128,36 +121,50 @@ function modify(event){
     const nameGroup = formGroups[1];
     const nameInput = nameGroup.querySelector("input");
     nameInput.disabled = false;
-    // DO THIS nameInput.value = name;
-    // DONT DO BELOW, IT IS A HACK COS I THINK TEST IS FAILING...
-    nameInput.value = "Customer";
+    nameInput.value = name;
 
     const emailGroup = formGroups[2];
     const emailInput = emailGroup.querySelector("input");
     emailInput.disabled = false;
-    //DO THIS emailInput.value = email;
-    // DONT DO BELOW, IT IS A HACK COS I THINK TEST IS FAILING...
-    emailInput.value = "customer@email.com";
+    emailInput.value = email;
 
     const roleGroup = formGroups[3];
-    const select = roleGroup.querySelectorAll("select");
-    console.log(role);
+    const select = roleGroup.querySelector("select");
     select.selected = role;
-    console.log(select);
+    select.value = role;
+    let myRole = "";
+    myRole = role;
+    select.onchange = function(){
+        myRole = select.value;
+        console.log(select.innerHTML);
+        console.log(select.text);
+    };
 
     const button = clone.getElementById("update-button");
     button.type = "button";
 
     button.addEventListener('click', function(event){
-        submitForm(event, "Customer");
+        const testing = select.text;
+        const rows = document.getElementById("users-container").getElementsByClassName("item-row");
+        for (const row of rows) {
+            const header = row.querySelector("h3");
+            const email = row.querySelector("p");
+            const role = row.querySelectorAll("p")[1];
+            if(header.id.includes(userId)) {
+                header.innerHTML = nameInput.value;
+                email.innerHTML = emailInput.value;
+                role.innerHTML = myRole;
+            }
+        }
+        submitForm(event, nameInput.value);
         const userData = {
             _id: idInput.value,
             name: nameInput.value,
             email: emailInput.value,
-            role: 'admin'
+            role: myRole
         };
-        console.log(userData);
-        postOrPutJSON(`/api/users/${ userId}`, "PUT", JSON.stringify(userData));
+        postOrPutJSON(`/api/users/${userId}`, "PUT", JSON.stringify(userData));
+        
     });
 
     modifyUserContainer.append(clone);
@@ -184,5 +191,4 @@ function remove(event) {
     const userContainer = document.getElementById("users-container");
     const itemRow = event.path[1];
     itemRow.remove();
-
 }
