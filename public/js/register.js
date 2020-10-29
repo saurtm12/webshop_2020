@@ -15,8 +15,7 @@ function register(){
     const name = registerForm.querySelectorAll("input")[0].value;
     const email = registerForm.querySelectorAll("input")[1].value;
     const password = registerForm.querySelectorAll("input")[2].value;
-    const passwordConfirmation = registerForm.querySelectorAll("input")[3].value;
-    console.log("Actually in the register function...");
+    //const passwordConfirmation = registerForm.querySelectorAll("input")[3].value;
     let registerData = {
         name: name,
         email: email,

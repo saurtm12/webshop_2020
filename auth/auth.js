@@ -14,13 +14,10 @@ const getCurrentUser = request => {
   // and getUser(email, password) function from utils/users.js to get the currently
   // logged in user
   const credential = getCredentials(request);
-  if (credential !== null)
-  {
+  if (credential !== null) {
     const user = getUser(credential[0], credential[1]);
     return user;
-  }
-  else 
-  {
+  } else {
     return null;
   }
 };

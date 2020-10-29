@@ -136,8 +136,6 @@ function modify(event){
     myRole = role;
     select.onchange = function(){
         myRole = select.value;
-        console.log(select.innerHTML);
-        console.log(select.text);
     };
 
     const button = clone.getElementById("update-button");
