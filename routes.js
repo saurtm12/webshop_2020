@@ -77,22 +77,15 @@ const handleRequest = async (request, response) => {
     const authorization = headers.authorization;
     const credential = getCredentials(request);
     const id = filePath.split('/')[3];
-    if (credential !== null)
-    {
+    if (credential !== null) {
       const authorizedUser = getUser(credential[0], credential[1]);
-      if (authorizedUser === undefined)
-      {
+      if (authorizedUser === undefined) {
         basicAuthChallenge(response);
-      }
-      else if (authorizedUser['role'] !== 'admin')
-      {
+      } else if (authorizedUser['role'] !== 'admin') {
         response.writeHead(403, {'WWW-Authenticate' : 'Basic'});
         response.end();
-      }
-      else 
-      {
-        if (method.toUpperCase() === 'GET')
-        {
+      } else {
+        if (method.toUpperCase() === 'GET') {
           const getUserInfo = getUserById(id);
           if (getUserInfo) {
             return responseUtils.sendJson(response, getUserInfo, 200);
@@ -118,7 +111,6 @@ const handleRequest = async (request, response) => {
           //role = jsonData.role;
           // TODO I tried to make the program work but it fails and im frustrated and delete it :>
         }
-
         // TODO : method delete : the test keeps failing but I dont know why :>
         if (method.toUpperCase() === 'DELETE') {
           const deleteUser = deleteUserById(id);
@@ -128,7 +120,6 @@ const handleRequest = async (request, response) => {
             return responseUtils.sendJson(response, deleteUser, 200);
           }
         }
-
       }
     } else {
       basicAuthChallenge(response);
