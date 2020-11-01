@@ -19,14 +19,23 @@ const userSchema = new Schema({
     type: String,
     required: true,
     minlength: 10,
+    set: hashPassword
   },
   role: {
     type: String,
     trim: true,
     default: "customer",
-    lowercase: true
+    lowercase: true,
+    enum: ['admin', 'customer']
   }
 });
+
+ function hashPassword(password) {
+  if(password.length < 10) return;
+  const saltRounds = 10;
+  const hashed = bcrypt.hashSync(password, saltRounds);
+  return hashed;
+}
 
 /**
  * Compare supplied password with user's own (hashed) password
@@ -36,6 +45,16 @@ const userSchema = new Schema({
  */
 userSchema.methods.checkPassword = async function (password) {
   // TODO: 9.4 Implement this
+  // return new Promise((resolve, reject) => {
+  //   bcrypt.compare(password, this.password, function(err, res) {
+  //     // res === true, if the password is a match
+  //     if(res) {
+  //       resolve(res);
+  //     } else {
+  //       reject(res);
+  //     }
+  //   });
+  // })
   
 };
 
