@@ -18,8 +18,18 @@ getJSON("/api/products").then(products => {
 
         button.id = `add-to-cart-${product._id}`;
 
+        const id = product._id
+
+        const passedProduct = {
+            '_id': id,
+            'name': name.innerHTML,
+            'description': description.innerHTML,
+            'price': price.innerHTML,
+            'amount': null
+        };
+
         button.addEventListener('click', function(event) {
-            addToCart(name.innerHTML);
+            addToCart(name.innerHTML, id, passedProduct);
         })
 
         const productContainer = document.getElementById("products-container");
@@ -30,6 +40,15 @@ getJSON("/api/products").then(products => {
     
 })
 
-function addToCart(productName) {
+function addToCart(productName, productId, product) {
     createNotification(`Added ${productName} to cart!`, "notifications-container", true);
+    let storageItem = sessionStorage.getItem(productId);
+    storageItem = JSON.parse(storageItem);
+    if (storageItem && storageItem.amount !== null) {
+        product.amount = parseInt(storageItem.amount) + 1;
+    } else {
+        product.amount = 1;
+    }
+    
+    sessionStorage.setItem(productId, JSON.stringify(product));
 }
