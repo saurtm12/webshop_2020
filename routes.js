@@ -7,6 +7,7 @@ const { sendJson, basicAuthChallenge} = require('./utils/responseUtils');
 const { userInfo } = require('os');
 const { parse } = require('path');
 const { getCurrentUser } = require('./auth/auth');
+const { getAllProducts } = require('./utils/products');
 /**
  * Known API routes and their allowed methods
  *
@@ -15,7 +16,8 @@ const { getCurrentUser } = require('./auth/auth');
  */
 const allowedMethods = {
   '/api/register': ['POST'],
-  '/api/users': ['GET']
+  '/api/users': ['GET'],
+  '/api/products': ['GET']
 };
 
 /**
@@ -139,6 +141,21 @@ const handleRequest = async (request, response) => {
     return responseUtils.contentTypeNotAcceptable(response);
   }
 
+  
+
+  if (filePath === '/api/products' && method.toUpperCase() === 'GET') {
+    if(!request.headers.authorization) {
+      return responseUtils.basicAuthChallenge(response);
+    }
+    if(getCurrentUser(request) === undefined) {
+      return responseUtils.basicAuthChallenge(response);
+    }
+    
+    const productData = getAllProducts();
+    return responseUtils.sendJson(response, productData, 200);
+  }
+
+
   // GET all users
   if (filePath === '/api/users' && method.toUpperCase() === 'GET') {
     // TODO: 8.3 Return all users as JSON
@@ -156,8 +173,8 @@ const handleRequest = async (request, response) => {
     if (current.role === 'customer') {
       return responseUtils.forbidden(response);
     }
-    const test = getAllUsers();
-    return responseUtils.sendJson(response, test, 200);
+    const allUsers = getAllUsers();
+    return responseUtils.sendJson(response, allUsers, 200);
   }
 
   // register new user
