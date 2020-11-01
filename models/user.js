@@ -43,19 +43,9 @@ const userSchema = new Schema({
  * @param {string} password
  * @returns {Promise<boolean>} promise that resolves to the comparison result
  */
-userSchema.methods.checkPassword = async function (password) {
+userSchema.methods.checkPassword = function (password) {
   // TODO: 9.4 Implement this
-  // return new Promise((resolve, reject) => {
-  //   bcrypt.compare(password, this.password, function(err, res) {
-  //     // res === true, if the password is a match
-  //     if(res) {
-  //       resolve(res);
-  //     } else {
-  //       reject(res);
-  //     }
-  //   });
-  // })
-  
+  return bcrypt.compare(password, this.password);
 };
 
 // Omit the version key when serialized to JSON
