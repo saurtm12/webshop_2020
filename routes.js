@@ -175,7 +175,7 @@ const handleRequest = async (request, response) => {
     if (current.role === 'customer') {
       return responseUtils.forbidden(response);
     }
-    const allUsers = getAllUsers();
+    const allUsers = await User.find().exec();
     return responseUtils.sendJson(response, allUsers, 200);
   }
 
