@@ -216,6 +216,7 @@ module.exports = {
   emailInUse,
   getAllUsers,
   getUser,
+  generateId,
   getUserById,
   resetUsers,
   saveNewUser,

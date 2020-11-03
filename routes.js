@@ -8,6 +8,7 @@ const { userInfo } = require('os');
 const { parse } = require('path');
 const { getCurrentUser } = require('./auth/auth');
 const { getAllProducts } = require('./utils/products');
+const User = require('./models/user');
 /**
  * Known API routes and their allowed methods
  *
@@ -80,15 +81,15 @@ const handleRequest = async (request, response) => {
     const credential = getCredentials(request);
     const id = filePath.split('/')[3];
     if (credential !== null) {
-      const authorizedUser = getUser(credential[0], credential[1]);
-      if (authorizedUser === undefined) {
+      const authorizedUser = await getCurrentUser(request);
+      if (authorizedUser === null) {
         basicAuthChallenge(response);
       } else if (authorizedUser['role'] !== 'admin') {
         response.writeHead(403, {'WWW-Authenticate' : 'Basic'});
         response.end();
       } else {
         if (method.toUpperCase() === 'GET') {
-          const getUserInfo = getUserById(id);
+          const getUserInfo = await User.findOne({'_id': id}).exec();
           if (getUserInfo) {
             return responseUtils.sendJson(response, getUserInfo, 200);
           } else {
@@ -112,12 +113,13 @@ const handleRequest = async (request, response) => {
           }
         }
         if (method.toUpperCase() === 'DELETE') {
-          const deleteUser = deleteUserById(id);
-          if (!deleteUser) {
+          const deleteUser = await User.findOne({'_id': id}).exec();
+          if (deleteUser === null ){
             return responseUtils.notFound(response);
-          } else {
-            return responseUtils.sendJson(response, deleteUser, 200);
           }
+          await User.deleteOne({"_id": id}).then(function() {
+            return responseUtils.sendJson(response, deleteUser, 200);
+          });
         }
       }
     } else {
@@ -147,7 +149,7 @@ const handleRequest = async (request, response) => {
     if(!request.headers.authorization) {
       return responseUtils.basicAuthChallenge(response);
     }
-    if(getCurrentUser(request) === undefined) {
+    if(await getCurrentUser(request) === undefined) {
       return responseUtils.basicAuthChallenge(response);
     }
     
@@ -166,8 +168,8 @@ const handleRequest = async (request, response) => {
     if(Buffer.from(authHeadersArray[1], 'base64').toString('base64') !== authHeadersArray[1]) {
       return responseUtils.basicAuthChallenge(response);
     }
-    const current = getCurrentUser(request);
-    if(current === undefined) {
+    const current = await getCurrentUser(request);
+    if(current === null) {
       return responseUtils.basicAuthChallenge(response);
     }
     if (current.role === 'customer') {
@@ -185,14 +187,14 @@ const handleRequest = async (request, response) => {
     }
 
     // TODO: 8.3 Implement registration
-    parseBodyJson(request).then((data) => {
+    await parseBodyJson(request).then(async (data) => {
       if (!data.email || !data.name || !data.password) {
         const newData = { ...data, error: 'ERROR' };
         response.writeHead(400, { 'Accept': 'application/json', 'Content-Type': 'application/json' });
         response.write(JSON.stringify(newData));
         return response.end();
       }
-      const users = getAllUsers();
+      const users = await User.find();
       const emails = users.map(u => u.email);
       if (emails.includes(data.email)) {
         const newData = { ...data, error: 'ERROR' };
@@ -200,9 +202,10 @@ const handleRequest = async (request, response) => {
         response.write(JSON.stringify(newData));
         return response.end();
       }
-      const newData = { '_id': '', ...data, 'role': 'customer' };
-      saveNewUser(data);
-      return sendJson(response, newData, 201);
+      await User.create({'name': data.name, 'email': data.email, 'password': data.password, 'role': 'customer'}, function (err, res) {
+        if (err) console.log(err);
+        return sendJson(response, res, 201);
+      });
     }).catch((err) => {
       console.log(err);
     });
