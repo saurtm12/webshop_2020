@@ -149,7 +149,7 @@ const handleRequest = async (request, response) => {
     if(!request.headers.authorization) {
       return responseUtils.basicAuthChallenge(response);
     }
-    if(await getCurrentUser(request) === undefined) {
+    if(await getCurrentUser(request) === null) {
       return responseUtils.basicAuthChallenge(response);
     }
     
