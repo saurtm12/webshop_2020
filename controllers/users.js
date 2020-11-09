@@ -3,9 +3,12 @@
  *
  * @param {http.ServerResponse} response
  */
+const { sendJson } = require('../utils/responseUtils');
+const { hashPassword } = require('../models/user');
 const getAllUsers = async response => {
   // TODO: 10.1 Implement this
-  throw new Error('Not Implemented');
+  const userdata = await require('../models/user').find();
+  sendJson(response,userdata);
 };
 
 /**
