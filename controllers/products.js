@@ -3,9 +3,12 @@
  *
  * @param {http.ServerResponse} response
  */
+const { sendJson } = require('../utils/responseUtils');
+const responseUtils = require('../utils/responseUtils');
+
 const getAllProducts = async response => {
-  // TODO: 10.1 Implement this
-  throw new Error('Not Implemented');
+  const productData = await require('../products.json').map(product => ({ ...product }));
+  responseUtils.sendJson(response, productData);
 };
 
 module.exports = { getAllProducts };
