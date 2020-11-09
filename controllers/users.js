@@ -3,12 +3,12 @@
  *
  * @param {http.ServerResponse} response
  */
-const { sendJson } = require('../utils/responseUtils');
-const { hashPassword } = require('../models/user');
+const responseUtils = require('../utils/responseUtils');
+
 const getAllUsers = async response => {
-  // TODO: 10.1 Implement this
-  const userdata = await require('../models/user').find();
-  sendJson(response,userdata);
+  const User = await require('../models/user');
+  const userdata = await User.find();
+  responseUtils.sendJson(response,userdata);
 };
 
 /**
@@ -32,8 +32,10 @@ const deleteUser = async (response, userId, currentUser) => {
  * @param {Object} userData JSON data from request body
  */
 const updateUser = async (response, userId, currentUser, userData) => {
-  // TODO: 10.1 Implement this
-  throw new Error('Not Implemented');
+  const userdata = await require('../models/user').find();
+  console.log(userId+" "+ currentUser._id);
+  //TODO: 10.1 this is harder than I thought :> 
+
 };
 
 /**
@@ -44,8 +46,16 @@ const updateUser = async (response, userId, currentUser, userData) => {
  * @param {Object} currentUser (mongoose document object)
  */
 const viewUser = async (response, userId, currentUser) => {
-  // TODO: 10.1 Implement this
-  throw new Error('Not Implemented');
+  // console.log(currentUser.id+" " +userId);
+  // Test fails (the printout ):>>>>
+  if (userId !== currentUser.id)
+  {
+    responseUtils.notFound(response);
+  }
+  else
+  {
+    responseUtils.sendJson(response, currentUser);
+  }
 };
 
 /**
