@@ -19,8 +19,16 @@ const getAllUsers = async response => {
  * @param {Object} currentUser (mongoose document object)
  */
 const deleteUser = async (response, userId, currentUser) => {
-  // TODO: 10.1 Implement this
-  throw new Error('Not Implemented');
+  const User = await require('../models/user');
+  const fUser = await User.findById(userId).exec();
+  if (! fUser){
+    return responseUtils.notFound(response);
+  }
+  if (userId === currentUser.id){
+    return responseUtils.badRequest(response, "Bad request");
+  }
+  await User.deleteOne({_id: userId}).then(()=> 
+    responseUtils.sendJson(response, fUser));
 };
 
 /**
@@ -32,10 +40,23 @@ const deleteUser = async (response, userId, currentUser) => {
  * @param {Object} userData JSON data from request body
  */
 const updateUser = async (response, userId, currentUser, userData) => {
-  const userdata = await require('../models/user').find();
-  console.log(userId+" "+ currentUser._id);
-  //TODO: 10.1 this is harder than I thought :> 
-
+  if (userId === currentUser.id){
+    return responseUtils.badRequest(response,"Updating own data is not allowed");
+  }
+  if (!userData.role){
+    return responseUtils.badRequest(response,"Missing role");
+  }
+  if (userData.role !== 'customer' && userData.role !== "admin"){
+    return responseUtils.badRequest(response,"Invalid role");
+  }
+  const User = await require('../models/user');
+  const fUser = await User.findById(userId).exec();
+  if (!fUser){
+    return responseUtils.notFound(response);
+  }
+  fUser.role = userData.role;
+  await fUser.save();
+  return responseUtils.sendJson(response, fUser);
 };
 
 /**
@@ -46,15 +67,15 @@ const updateUser = async (response, userId, currentUser, userData) => {
  * @param {Object} currentUser (mongoose document object)
  */
 const viewUser = async (response, userId, currentUser) => {
-  // console.log(currentUser.id+" " +userId);
-  // Test fails (the printout ):>>>>
-  if (userId !== currentUser.id)
+  const User = await require('../models/user');
+  const vUser = await User.findById(userId).exec();
+  if (! vUser)
   {
-    responseUtils.notFound(response);
+    return responseUtils.notFound(response);
   }
   else
   {
-    responseUtils.sendJson(response, currentUser);
+    return responseUtils.sendJson(response, vUser);
   }
 };
 
