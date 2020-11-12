@@ -1,6 +1,6 @@
 getJSON("/api/products").then(products => {
     const template = document.getElementById("product-template");
-    products.map(product => {
+    for (product of products) {
         const clone = template.content.cloneNode(true);
         const name = clone.querySelector("h3");
         const description = clone.querySelector("p");
@@ -34,7 +34,8 @@ getJSON("/api/products").then(products => {
 
         const productContainer = document.getElementById("products-container");
         productContainer.append(clone);
-    });
+
+    }
 
     
 })
