@@ -37,7 +37,7 @@ const acceptsJson = request => {
     return acceptsjson;
   }
   const acceptArray = request.headers.accept.split(',');
-  const include = acceptArray.filter(e => a.includes("*/*") || a.includes('application/json'))
+  const include = acceptArray.filter(a => a.includes("*/*") || a.includes('application/json'))
   if (include.length > 0){
     acceptsjson = true;
   }
