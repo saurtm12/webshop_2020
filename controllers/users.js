@@ -86,8 +86,30 @@ const viewUser = async (response, userId, currentUser) => {
  * @param {Object} userData JSON data from request body
  */
 const registerUser = async (response, userData) => {
-  // TODO: 10.1 Implement this
-  throw new Error('Not Implemented');
+  const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+  const regex = new RegExp(pattern);
+  if (!regex.test(userData.email))
+  {
+    return responseUtils.badRequest(response,"Email not valid");
+  }
+  const User = await require('../models/user');
+  const fUser = await User.findOne({email: userData.email}).exec();
+  if (fUser){
+    return responseUtils.badRequest(response,"Email is already in use");
+  }
+  if (!userData.name){
+    return responseUtils.badRequest(response,"Name is missing");
+  }
+
+  if (!userData.password){
+    return responseUtils.badRequest(response,"Password is missing");
+  }
+  if (userData.password.length <10){
+    return responseUtils.badRequest(response,"Password is too short");
+  }
+  userData.role = "customer";
+  const newUser = new User(userData)
+  await newUser.save().then( ()=> responseUtils.createdResource(response,newUser));
 };
 
 module.exports = { getAllUsers, registerUser, deleteUser, viewUser, updateUser };
