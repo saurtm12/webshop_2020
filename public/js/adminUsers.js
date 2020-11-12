@@ -40,7 +40,7 @@ window.onload = function() {
     getJSON("/api/users").then(users => {
         // Do something with the json
         const template = document.getElementById("user-template");
-        for(user of users) {
+        user.map(user => {
             const clone = template.content.cloneNode(true);
             const id = clone.querySelector("h3");
             const email = clone.querySelector("p");
@@ -68,7 +68,7 @@ window.onload = function() {
     
             const usersContainer = document.getElementById("users-container");
             usersContainer.append(clone);
-        }
+        });
     });
 };
 
@@ -83,24 +83,24 @@ function modify(event){
     let name = "";
     let email = "";
     let role = "";
-    for(const username of userNames) {
+    userNames.map(username => {
         const innerId = username.id;
         if(innerId.includes(userId)){
             name = username.innerHTML;
         }
-    }
-    for(const uEmail of userEmails) {
+    });
+    userEmails.map(uEmail => {
         const innerId = uEmail.id;
         if(innerId.includes(userId)){
             email = uEmail.innerHTML;
         }
-    }
-    for(const uRole of userRoles) {
+    });
+    userRoles.map(uRole => {
         const innerId = uRole.id;
         if(innerId.includes(userId)){
             role = uRole.innerHTML;
         }
-    }
+    });
 
     const modifyUserContainer = document.getElementById("modify-user");
     const template = document.getElementById("form-template");
@@ -144,7 +144,7 @@ function modify(event){
     button.addEventListener('click', function(event){
         const testing = select.text;
         const rows = document.getElementById("users-container").getElementsByClassName("item-row");
-        for (const row of rows) {
+        rows.map(row => {
             const header = row.querySelector("h3");
             const email = row.querySelector("p");
             const role = row.querySelectorAll("p")[1];
@@ -153,7 +153,8 @@ function modify(event){
                 email.innerHTML = emailInput.value;
                 role.innerHTML = myRole;
             }
-        }
+        });
+
         submitForm(event, nameInput.value);
         const userData = {
             _id: idInput.value,
@@ -178,12 +179,12 @@ function remove(event) {
     const parsedId = id.split("-");
     const userNames = document.getElementsByClassName("user-name");
     let name = "";
-    for(const username of userNames) {
+    userNames.map(username => {
         const userId = username.id;
         if(userId.includes(parsedId[1])){
             name = username.innerHTML;
         }
-    }
+    });
     deleteResourse(`/api/users/${ parsedId[1]}` );
     createNotification(`Deleted user ${name}`, "notifications-container", true);
     const userContainer = document.getElementById("users-container");

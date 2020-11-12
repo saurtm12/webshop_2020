@@ -5,8 +5,7 @@ const template = document.getElementById("cart-item-template");
 document.getElementById("place-order-button").addEventListener('click', function(event){
     placeOrder();
 })
-
-for (item in sessionStorageItems) {
+sessionStorageItems.map(item => {
     let itemObject = sessionStorage.getItem(item);
     itemObject = JSON.parse(itemObject);
     const clone = template.content.cloneNode(true);
@@ -37,7 +36,7 @@ for (item in sessionStorageItems) {
         addProduct(itemObject._id, amount);
     });
     document.getElementById("cart-container").append(clone);
-}
+});
 
 function addProduct(id, amountParagraph) {
     let obj = sessionStorage.getItem(id);
@@ -64,8 +63,8 @@ function placeOrder() {
     createNotification("Successfully created an order!", "notifications-container", true);
     removeElement("cart-container", "item-row");
     const divs = document.getElementsByClassName("item-row");
-    for (d of divs) {
+    divs.map(d=> {
         d.parentNode.parentNode.removeChild(d.parentNode);
-    }
+    });
     sessionStorage.clear();
 }
