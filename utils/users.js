@@ -37,16 +37,23 @@ const resetUsers = () => {
  */
 const generateId = () => {
   let id;
+  const giveId = () => {
+    const id = Math.random().toString(36).substr(2, 9);
+    if (data.users.some(u => u._id === id)){
+      return giveId();
+    }
+    return id;
+  }
 
-  do {
-    // Generate unique random id that is not already in use
-    // Shamelessly borrowed from a Gist. See:
-    // https://gist.github.com/gordonbrander/2230317
+  // do {
+  //   // Generate unique random id that is not already in use
+  //   // Shamelessly borrowed from a Gist. See:
+  //   // https://gist.github.com/gordonbrander/2230317
 
-    id = Math.random().toString(36).substr(2, 9);
-  } while (data.users.some(u => u._id === id));
+  //   id = Math.random().toString(36).substr(2, 9);
+  // } while (data.users.some(u => u._id === id));
 
-  return id;
+  return generateId();
 };
 
 /**
@@ -199,12 +206,13 @@ const updateUserRole = (userId, role) => {
 const validateUser = user => {
   // TODO: 8.3 Validate user before saving
   const keys = ["name", "email", "password"];
-  const errors = [];
-  for (const key of keys){
-    if(!user[key]){
-      errors.push(`Missing ${ key}`);
-    }
-  }
+  const errors = keys.filter(key => !user[key]);
+
+  // for (const key of keys){
+  //   if(!user[key]){
+  //     errors.push(`Missing ${ key}`);
+  //   }
+  // }
   if(user.role !== undefined && user.role !== 'admin' && user.role !== 'customer'){
     errors.push("Unknown role");
   }
