@@ -3,7 +3,7 @@ const { handleRequest } = require('./routes');
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost:27017/Test_WebShopDb', {useNewUrlParser: true}, { useUnifiedTopology: true } );
-var db = mongoose.connection;
+const db = mongoose.connection;
 
 //Bind connection to error event (to get notification of connection errors)
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
