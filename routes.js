@@ -105,12 +105,14 @@ const handleRequest = async (request, response) => {
           if(jsonData.role !== 'customer' && jsonData.role !== 'admin') {
             return responseUtils.badRequest(response);
           }
-          await User.findOneAndUpdate({"_id": id}, {$set:{role:jsonData.role}}, {new:true}, (err, doc) => {
-            if(doc !== null) {
-              return responseUtils.sendJson(response, doc, 200);
-            }
-            return responseUtils.notFound(response);
-          });
+          
+          const filter = {_id: id};
+          const update = { role: jsonData.role };
+          const doc = await User.findOneAndUpdate(filter, update, {new: true});
+          if(doc !== null) {
+            return responseUtils.sendJson(response, doc, 200);
+          }
+          return responseUtils.notFound(response);
         }
         if (method.toUpperCase() === 'DELETE') {
           const deleteUser = await User.findOne({'_id': id}).exec();
