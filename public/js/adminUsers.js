@@ -40,7 +40,7 @@ window.onload = function() {
     getJSON("/api/users").then(users => {
         // Do something with the json
         const template = document.getElementById("user-template");
-        for(user of users) {
+        users.map(user => {
             const clone = template.content.cloneNode(true);
             const id = clone.querySelector("h3");
             const email = clone.querySelector("p");
@@ -68,7 +68,7 @@ window.onload = function() {
     
             const usersContainer = document.getElementById("users-container");
             usersContainer.append(clone);
-        }
+        });
     });
 };
 
