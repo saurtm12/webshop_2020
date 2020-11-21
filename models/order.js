@@ -15,7 +15,7 @@ const orderedItemSchema = new Schema({
             minlength: 1,
             required: true,
             trim: true
-        }
+        },
         price: {
             type: mongoose.Types.Decimal128,
             required: true,
@@ -49,5 +49,5 @@ const orderSchema = new Schema({
 orderSchema.set('toJSON', { virtuals: false, versionKey: false });
 orderedItemSchema.set('toJSON', { virtuals: false, versionKey: false});
 
-const Order = new mongoose.model('Order', orderSchema);
-module.exports = Order;
+const Orders = new mongoose.model('Order', orderSchema);
+module.exports = Orders;

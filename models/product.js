@@ -21,7 +21,7 @@ const productSchema = new Schema({
         required: true,
         min: 0,
         validate: function() {
-            reutrn this.price > 0;
+            return this.price > 0;
         }
     },
     img: {
