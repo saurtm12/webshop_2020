@@ -1,13 +1,14 @@
 const responseUtils = require('./utils/responseUtils');
 const { acceptsJson, isJson, parseBodyJson, getCredentials} = require('./utils/requestUtils');
 const { renderPublic } = require('./utils/render');
-const { emailInUse, getAllUsers, saveNewUser, validateUser, generateId, getUser, getUserById, updateUserRole, deleteUserById } = require('./utils/users');
+const { emailInUse, saveNewUser, validateUser, generateId, getUser, getUserById, updateUserRole, deleteUserById } = require('./utils/users');
 const fs = require('fs');
 const { sendJson, basicAuthChallenge} = require('./utils/responseUtils');
 const { userInfo } = require('os');
 const { parse } = require('path');
 const { getCurrentUser } = require('./auth/auth');
-const { getAllProducts } = require('./utils/products');
+const { getAllProducts } = require('./controllers/products');
+const userController = require('./controllers/users')
 const User = require('./models/user');
 /**
  * Known API routes and their allowed methods
@@ -89,39 +90,17 @@ const handleRequest = async (request, response) => {
         response.end();
       } else {
         if (method.toUpperCase() === 'GET') {
-          const getUserInfo = await User.findOne({'_id': id}).exec();
-          if (getUserInfo) {
-            return responseUtils.sendJson(response, getUserInfo, 200);
-          } else {
-            return responseUtils.notFound(response);
-          }
+          return userController.viewUser(response,id);
         }
         
         if (method.toUpperCase() === 'PUT') {
           const jsonData = await parseBodyJson(request);
-          if(jsonData.role === null || jsonData.role === undefined) {
-            return responseUtils.badRequest(response);
-          }
-          if(jsonData.role !== 'customer' && jsonData.role !== 'admin') {
-            return responseUtils.badRequest(response);
-          }
-          
-          const filter = {_id: id};
-          const update = { role: jsonData.role };
-          const doc = await User.findOneAndUpdate(filter, update, {new: true});
-          if(doc !== null) {
-            return responseUtils.sendJson(response, doc, 200);
-          }
-          return responseUtils.notFound(response);
+          const currentUser = getCurrentUser(request);
+          return userController.updateUser(response, id, currentUser, jsonData)
         }
-        if (method.toUpperCase() === 'DELETE') {
-          const deleteUser = await User.findOne({'_id': id}).exec();
-          if (deleteUser === null ){
-            return responseUtils.notFound(response);
-          }
-          await User.deleteOne({"_id": id}).then(function() {
-            return responseUtils.sendJson(response, deleteUser, 200);
-          });
+        if (method.toUpperCase() === 'DELETE') {          
+          const currentUser = getCurrentUser(request);
+          return userController.deleteUser(response, id, currentUser);
         }
       }
     } else {
@@ -154,9 +133,7 @@ const handleRequest = async (request, response) => {
     if(await getCurrentUser(request) === null) {
       return responseUtils.basicAuthChallenge(response);
     }
-    
-    const productData = getAllProducts();
-    return responseUtils.sendJson(response, productData, 200);
+    return getAllProducts(response);
   }
 
 
@@ -177,8 +154,9 @@ const handleRequest = async (request, response) => {
     if (current.role === 'customer') {
       return responseUtils.forbidden(response);
     }
-    const allUsers = await User.find().exec();
-    return responseUtils.sendJson(response, allUsers, 200);
+    return userController.getAllUsers(response);
+    // // const allUsers = await User.find().exec();
+    // return responseUtils.sendJson(response, {}, 200);
   }
 
   // register new user
@@ -189,29 +167,8 @@ const handleRequest = async (request, response) => {
     }
 
     // TODO: 8.3 Implement registration
-    await parseBodyJson(request).then(async (data) => {
-      if (!data.email || !data.name || !data.password) {
-        const newData = { ...data, error: 'ERROR' };
-        response.writeHead(400, { 'Accept': 'application/json', 'Content-Type': 'application/json' });
-        response.write(JSON.stringify(newData));
-        return response.end();
-      }
-      const users = await User.find();
-      const emails = users.map(u => u.email);
-      if (emails.includes(data.email)) {
-        const newData = { ...data, error: 'ERROR' };
-        response.writeHead(400, { 'Accept': 'application/json', 'Content-Type': 'application/json' });
-        response.write(JSON.stringify(newData));
-        return response.end();
-      }
-      await User.create({'name': data.name, 'email': data.email, 'password': data.password, 'role': 'customer'}, function (err, res) {
-        if (err) console.log(err);
-        return sendJson(response, res, 201);
-      });
-    }).catch((err) => {
-      console.log(err);
-    });
-    // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
+    const userData = await parseBodyJson(request);
+    return userController.registerUser(response, userData);
   }
 };
 
