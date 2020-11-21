@@ -25,8 +25,9 @@ const productSchema = new Schema({
         }
     },
     img: {
-        type: Buffer,
-        contentType: String
+        type: String,
+        trim: true,
+        match: "(http|https):\/\/\S+\.\S+\/?\S*"
     }
 });
 
