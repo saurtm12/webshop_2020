@@ -7,7 +7,8 @@ const responseUtils = require('../utils/responseUtils');
 const { sendJson } = require('../utils/responseUtils');
 
 const getAllProducts = async response => {
-  const productData = await require('../products.json').map(product => ({ ...product }));
+  const Product = await require('../models/product');
+  const productData = await Product.find();
   sendJson(response, productData);
 };
 
@@ -18,15 +19,15 @@ const getAllProducts = async response => {
  * @param {Object} productData JSON data from request boy
  * @param {Object} currentUser moongoose document object
  */
-const registerProduct = async (response, productData, currentUser) =>{
-  if (! currentUser){
-    return responseUtils.basicAuthChallenge(response);
-  }
-  if (currentUser.role !== "admin"){
-    return responseUtils.forbidden(response);
-  }
+const registerProduct = async (response, productData) =>{
   if (productData.price <= 0){
       return responseUtils.badRequest(response, "Invalid price");
+  }
+  const pattern = "(http|https):\/\/\S+\.\S+\/?\S*";
+  const regex = new RegExp(pattern);
+  if (!regex.test(userData.email))
+  {
+    return responseUtils.badRequest(response, "Image resource is not valid");
   }
   const Product = await require('../models/product');
   const newProduct = new Product({
@@ -46,10 +47,7 @@ const registerProduct = async (response, productData, currentUser) =>{
  * @param {Object} productId 
  * @param {Object} currentUser moongoose document object
  */
-const viewProduct = async (response, productId, currentUser) => {
-  if (! currentUser){
-    return responseUtils.basicAuthChallenge(response);
-  }
+const viewProduct = async (response, productId) => {
   const Product = await require('../models/product');
   const vProduct = await Product.findById(productId).exec();
   if (!vProduct){
@@ -68,27 +66,22 @@ const viewProduct = async (response, productId, currentUser) => {
  * @param {Object} currentUser moongoose document object
  * @param {Object} productData JSON data from request body
  */
-const updateProduct = async (response, productId, currentUser, productData) => {
-  if (!currentUser){
-    return responseUtils.basicAuthChallenge(response);
-  }
-
-  if (!currentUser.role || currentUser.role !== "admin"){
-    return responseUtils.badRequest(response, "Bad request");
-  }
+const updateProduct = async (response, productId, productData) => {
   const Product = await require('../models/product');
   const fProduct = await Product.findById(productId).exec();
 
   if (!fProduct){
     return responseUtils.notFound(response);
   }
-  else{
-    Object.entries(productData).forEach((key, value) => {
-      fProduct[key] = value;
-    });
-    await fProduct.save();
-    return responseUtils.sendJson(response, fProduct);
+
+  if (productData.price <= 0){
+    return responseUtils.badRequest(response, "Invalid price");
   }
+  Object.entries(productData).forEach((key, value) => {
+    fProduct[key] = value;
+  });
+  await fProduct.save();
+  return responseUtils.sendJson(response, fProduct);
 }
 
 
