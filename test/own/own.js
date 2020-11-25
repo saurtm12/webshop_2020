@@ -1,77 +1,65 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-describe('Test numerical operations', () =>{
-    describe('examine 1+1 = 3', ()=>
+describe('NO IMPLEMENT', () =>{
+    describe('NO IMPLEMENT', ()=>
     {
-        it('1+1 should be 3', ()=>{
-            expect(1+1).to.equal(3);
+        it('NO IMPLEMENT', ()=>{
+            throw "NO IMPLEMENT";
         });
     });
-    describe('examine 1*1 = 3', ()=>
+    escribe('NO IMPLEMENT', ()=>
     {
-        it('1*1 should be 3', ()=>{
-            expect(1*1).to.equal(3);
+        it('NO IMPLEMENT', ()=>{
+            throw "NO IMPLEMENT";
         });
     });
-    describe('examine undefined === true', ()=>
+    escribe('NO IMPLEMENT', ()=>
     {
-        it('undefined should be true', ()=>{
-            expect(undefined).to.equal(true);
+        it('NO IMPLEMENT', ()=>{
+            throw "NO IMPLEMENT";
         });
     });
-    describe('examine 3/2 = 1', ()=>
+    escribe('NO IMPLEMENT', ()=>
     {
-        it('expect 3/2 = 1', ()=>{
-            expect(3/2).to.equal(1);
+        it('NO IMPLEMENT', ()=>{
+            throw "NO IMPLEMENT";
         });
     });
-    describe('examine 3/2 = 1', ()=>
+    escribe('NO IMPLEMENT', ()=>
     {
-        it('expect 3/2 = 1', ()=>{
-            expect(3/2).to.equal(1);
+        it('NO IMPLEMENT', ()=>{
+            throw "NO IMPLEMENT";
         });
     });
-    describe('examine 3/2 = 1', ()=>
+    escribe('NO IMPLEMENT', ()=>
     {
-        it('expect 3/2 = 1', ()=>{
-            expect(3/2).to.equal(1);
+        it('NO IMPLEMENT', ()=>{
+            throw "NO IMPLEMENT";
         });
     });
-    describe('examine 3/2 = 1', ()=>
+    escribe('NO IMPLEMENT', ()=>
     {
-        it('expect 3/2 = 1', ()=>{
-            expect(3/2).to.equal(1);
+        it('NO IMPLEMENT', ()=>{
+            throw "NO IMPLEMENT";
         });
     });
-    describe('examine 3/2 = 1', ()=>
+    escribe('NO IMPLEMENT', ()=>
     {
-        it('expect 3/2 = 1', ()=>{
-            expect(3/2).to.equal(1);
+        it('NO IMPLEMENT', ()=>{
+            throw "NO IMPLEMENT";
         });
     });
-    describe('examine 3/2 = 1', ()=>
+    escribe('NO IMPLEMENT', ()=>
     {
-        it('expect 3/2 = 1', ()=>{
-            expect(3/2).to.equal(1);
+        it('NO IMPLEMENT', ()=>{
+            throw "NO IMPLEMENT";
         });
     });
-    describe('examine 3/2 = 1', ()=>
+    escribe('NO IMPLEMENT', ()=>
     {
-        it('expect 3/2 = 1', ()=>{
-            expect(3/2).to.equal(1);
-        });
-    });
-    describe('examine 3/2 = 1', ()=>
-    {
-        it('expect 3/2 = 1', ()=>{
-            expect(3/2).to.equal(1);
-        });
-    });
-    describe('examine 3/2 = 1', ()=>
-    {
-        it('expect 3/2 = 1', ()=>{
-            expect(3/2).to.equal(1);
+        it('NO IMPLEMENT', ()=>{
+            throw "NO IMPLEMENT";
         });
     });
 })

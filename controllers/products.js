@@ -85,10 +85,7 @@ const updateProduct = async (response, productId, productData) => {
 }
 
 
-const deleteProduct = async (response, productId, currentUser) => {
-  if (currentUser.role !== "admin"){
-    return responseUtils.badRequest(reponse, "Bad request");
-  }
+const deleteProduct = async (response, productId) => {
   const Product = await require('../models/product');
   const fProduct = await Product.findById(productId).exec();
   if (!fProduct){
@@ -97,4 +94,4 @@ const deleteProduct = async (response, productId, currentUser) => {
   await Product.deleteOne({_id: productId}).then(() => 
   responseUtils.sendJson(response, fProduct));
 }
-module.exports = { getAllProducts };
+module.exports = { getAllProducts, registerProduct, updateProduct, deleteProduct};
