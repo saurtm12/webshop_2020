@@ -10,6 +10,7 @@ const { getCurrentUser } = require('./auth/auth');
 const { getAllProducts } = require('./controllers/products');
 const userController = require('./controllers/users')
 const User = require('./models/user');
+const { match } = require('assert');
 /**
  * Known API routes and their allowed methods
  *
@@ -64,6 +65,14 @@ const matchIdRoute = (url, prefix) => {
 const matchUserId = url => {
   return matchIdRoute(url, 'users');
 };
+
+const matchProductId = url => {
+  return matchIdRoute(url, 'products');
+}
+
+const matchOrderId = url => {
+  return matchIdRoute(url, 'orders')
+}
 
 const handleRequest = async (request, response) => {
   const { url, method, headers } = request;

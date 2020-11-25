@@ -1,11 +1,22 @@
 const responseUtils = require('../utils/responseUtils');
 
+/**
+ * get all orders and send json (with admin)
+ *
+ * @param {http.ServerResponse} response
+ */
 const getAllOrders = async response => {
     const Order = await require("../models/order");
     const orderData = await Order.find({});
     return responseUtils.sendJson(response, orderData);
 }
 
+/**
+ * view an order with admin
+ *
+ * @param {http.ServerResponse} response
+ * @param orderId
+ */
 const viewOrder = async (response, orderId) => {
     const Order = await require("../models/order");
     const order = await Order.findById(orderId).exec();
@@ -16,6 +27,12 @@ const viewOrder = async (response, orderId) => {
     return responseUtils.sendJson(response, order);
 }
 
+/**
+ * Register orders of a customer
+ *
+ * @param {http.ServerResponse} response
+ * @param cId : customer Id, assume that cId has been in our database
+ */
 const viewOrdersByCustomer = async (response, cId) => {
     const Order = await require("../models/order");
     const orderData = await Order.find({customerId : cId}).exec();
