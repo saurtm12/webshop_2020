@@ -39,7 +39,7 @@ const orderSchema = new Schema({
         required: true,
         trim: true
     },
-    products: {
+    items: {
         type: [orderedItemSchema],
         validate: () => { return this.products.length >= 1},
         description: "Array of order items. Each item must have a COPY of the product information (no image) and the amount of products ordered"

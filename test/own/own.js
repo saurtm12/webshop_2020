@@ -8,55 +8,55 @@ describe('NO IMPLEMENT', () =>{
             throw "NO IMPLEMENT";
         });
     });
-    escribe('NO IMPLEMENT', ()=>
+    describe('NO IMPLEMENT', ()=>
     {
         it('NO IMPLEMENT', ()=>{
             throw "NO IMPLEMENT";
         });
     });
-    escribe('NO IMPLEMENT', ()=>
+    describe('NO IMPLEMENT', ()=>
     {
         it('NO IMPLEMENT', ()=>{
             throw "NO IMPLEMENT";
         });
     });
-    escribe('NO IMPLEMENT', ()=>
+    describe('NO IMPLEMENT', ()=>
     {
         it('NO IMPLEMENT', ()=>{
             throw "NO IMPLEMENT";
         });
     });
-    escribe('NO IMPLEMENT', ()=>
+    describe('NO IMPLEMENT', ()=>
     {
         it('NO IMPLEMENT', ()=>{
             throw "NO IMPLEMENT";
         });
     });
-    escribe('NO IMPLEMENT', ()=>
+    describe('NO IMPLEMENT', ()=>
     {
         it('NO IMPLEMENT', ()=>{
             throw "NO IMPLEMENT";
         });
     });
-    escribe('NO IMPLEMENT', ()=>
+    describe('NO IMPLEMENT', ()=>
     {
         it('NO IMPLEMENT', ()=>{
             throw "NO IMPLEMENT";
         });
     });
-    escribe('NO IMPLEMENT', ()=>
+    describe('NO IMPLEMENT', ()=>
     {
         it('NO IMPLEMENT', ()=>{
             throw "NO IMPLEMENT";
         });
     });
-    escribe('NO IMPLEMENT', ()=>
+    describe('NO IMPLEMENT', ()=>
     {
         it('NO IMPLEMENT', ()=>{
             throw "NO IMPLEMENT";
         });
     });
-    escribe('NO IMPLEMENT', ()=>
+    describe('NO IMPLEMENT', ()=>
     {
         it('NO IMPLEMENT', ()=>{
             throw "NO IMPLEMENT";
