@@ -1,5 +1,5 @@
 const responseUtils = require('./utils/responseUtils');
-const { acceptsJson, isJson, parseBodyJson, getCredentials} = require('./utils/requestUtils');
+const { acceptsJson, isJson, parseBodyJson, getCredentials, isValidJson} = require('./utils/requestUtils');
 const { renderPublic } = require('./utils/render');
 const { emailInUse, saveNewUser, validateUser, generateId, getUser, getUserById, updateUserRole, deleteUserById } = require('./utils/users');
 const fs = require('fs');
@@ -7,8 +7,9 @@ const { sendJson, basicAuthChallenge} = require('./utils/responseUtils');
 const { userInfo } = require('os');
 const { parse } = require('path');
 const { getCurrentUser } = require('./auth/auth');
-const { getAllProducts } = require('./controllers/products');
-const userController = require('./controllers/users')
+const { getAllProducts, registerProduct, viewProduct } = require('./controllers/products');
+const userController = require('./controllers/users');
+const orderController = require('./controllers/orders');
 const User = require('./models/user');
 const { match } = require('assert');
 /**
@@ -20,7 +21,8 @@ const { match } = require('assert');
 const allowedMethods = {
   '/api/register': ['POST'],
   '/api/users': ['GET'],
-  '/api/products': ['GET']
+  '/api/products': ['GET', 'POST'],
+  '/api/orders': ['GET', 'POST']
 };
 
 /**
@@ -85,6 +87,30 @@ const handleRequest = async (request, response) => {
     return renderPublic(fileName, response);
   }
 
+  if (matchProductId(filePath)) {
+    const credential = getCredentials(request);
+    const productId = filePath.split('/')[3];
+    if (credential !== null) {
+      const authorizedUser = await getCurrentUser(request);
+      if (authorizedUser === null) {
+        basicAuthChallenge(response);
+      }
+      if (!acceptsJson(request)) {
+        return responseUtils.contentTypeNotAcceptable(response);
+      }
+      if (method.toUpperCase() === 'GET') {
+        return viewProduct(response, productId);
+      }
+      if (method.toUpperCase() === 'PUT') {
+        if (current.role === 'customer') {
+          return responseUtils.forbidden(response);
+        }
+      }
+    } else {
+      basicAuthChallenge(response);
+    }
+  }
+
   if (matchUserId(filePath)) {
     // TODO: 8.5 Implement view, update and delete a single user by ID (GET, PUT, DELETE)
     // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
@@ -100,15 +126,24 @@ const handleRequest = async (request, response) => {
         response.end();
       } else {
         if (method.toUpperCase() === 'GET') {
-          return userController.viewUser(response,id);
+          if (!acceptsJson(request)) {
+            return responseUtils.contentTypeNotAcceptable(response);
+          }
+          return userController.viewUser(response, id);
         }
         
         if (method.toUpperCase() === 'PUT') {
+          if (!acceptsJson(request)) {
+            return responseUtils.contentTypeNotAcceptable(response);
+          }
           const jsonData = await parseBodyJson(request);
           const currentUser = getCurrentUser(request);
-          return userController.updateUser(response, id, currentUser, jsonData)
+          return userController.updateUser(response, id, currentUser, jsonData);
         }
-        if (method.toUpperCase() === 'DELETE') {          
+        if (method.toUpperCase() === 'DELETE') { 
+          if (!acceptsJson(request)) {
+            return responseUtils.contentTypeNotAcceptable(response);
+          }         
           const currentUser = getCurrentUser(request);
           return userController.deleteUser(response, id, currentUser);
         }
@@ -146,6 +181,27 @@ const handleRequest = async (request, response) => {
     return getAllProducts(response);
   }
 
+  if (filePath === '/api/products' && method.toUpperCase() === 'POST') {
+    if(!request.headers.authorization) {
+      return responseUtils.basicAuthChallenge(response);
+    }
+    const current = await getCurrentUser(request);
+    if(current === null) {
+      return responseUtils.basicAuthChallenge(response);
+    }
+    if (current.role === 'customer') {
+      return responseUtils.forbidden(response);
+    }
+    const productData = await parseBodyJson(request);
+    if (!productData.name.length < 1 || !productData.price.length < 1) {
+      return responseUtils.badRequest(response);
+    }
+    if(await !isValidJson(JSON.stringify(productData))) {
+      return responseUtils.badRequest(response);
+    }
+    return registerProduct(response, productData);
+  }
+
 
   // GET all users
   if (filePath === '/api/users' && method.toUpperCase() === 'GET') {
@@ -179,6 +235,35 @@ const handleRequest = async (request, response) => {
     // TODO: 8.3 Implement registration
     const userData = await parseBodyJson(request);
     return userController.registerUser(response, userData);
+  }
+
+  if (filePath === '/api/orders' && method.toUpperCase() === 'GET') {
+    if(!request.headers.authorization) {
+      return responseUtils.basicAuthChallenge(response);
+    }
+    const authHeadersArray = request.headers.authorization.split(" ");
+    if(Buffer.from(authHeadersArray[1], 'base64').toString('base64') !== authHeadersArray[1]) {
+      return responseUtils.basicAuthChallenge(response);
+    }
+    const current = await getCurrentUser(request);
+    if(current === null) {
+      return responseUtils.basicAuthChallenge(response);
+    }
+    return orderController.getAllOrders(response);
+  }
+  if (filePath === '/api/orders' && method.toUpperCase() === 'POST') {
+    if(!request.headers.authorization) {
+      return responseUtils.basicAuthChallenge(response);
+    }
+    const authHeadersArray = request.headers.authorization.split(" ");
+    if(Buffer.from(authHeadersArray[1], 'base64').toString('base64') !== authHeadersArray[1]) {
+      return responseUtils.basicAuthChallenge(response);
+    }
+    const current = await getCurrentUser(request);
+    if(current === null) {
+      return responseUtils.basicAuthChallenge(response);
+    }
+    return orderController.registerOrder(response);
   }
 };
 
