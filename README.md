@@ -1,6 +1,6 @@
 # Group 
 
-Member1:  name, email, student ID, 
+Member1:  Teemu Loijas, teemu.loijas@tuni.fi, 050090837, 
 resposible for: TODO, short description of duties 
 
 Member2:  name, email, student ID, 
