@@ -39,6 +39,12 @@ sessionStorageObject.map(item => {
     document.getElementById("cart-container").append(clone);
 });
 
+/**
+ * Add product
+ *
+ * @param {string} id ID of the product
+ * @param {object} amountParagraph JSON data from request body
+ */
 function addProduct(id, amountParagraph) {
     let obj = sessionStorage.getItem(id);
     obj = JSON.parse(obj);
@@ -47,6 +53,12 @@ function addProduct(id, amountParagraph) {
     amountParagraph.innerHTML = obj.amount + "x";
 }
 
+/**
+ * Remove product
+ *
+ * @param {string} id ID of the product
+ * @param {object} amountParagraph JSON data from request body
+ */
 function removeProduct(id, amountParagraph) {
     let obj = sessionStorage.getItem(id);
     obj = JSON.parse(obj);
@@ -60,6 +72,10 @@ function removeProduct(id, amountParagraph) {
     amountParagraph.innerHTML = obj.amount + "x";
 }
 
+/**
+ * Place order.
+ *
+ */
 function placeOrder() {
     createNotification("Successfully created an order!", "notifications-container", true);
     removeElement("cart-container", "item-row");

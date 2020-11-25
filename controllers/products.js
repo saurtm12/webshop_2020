@@ -1,7 +1,8 @@
 /**
  * Send all products as JSON
  *
- * @param {http.ServerResponse} response
+ * @param {object} response http.ServerResponse
+ * @returns {object} response
  */
 const responseUtils = require('../utils/responseUtils');
 const { sendJson } = require('../utils/responseUtils');
@@ -15,11 +16,11 @@ const getAllProducts = async response => {
 /**
  * Register new product and send created product back as JSON
  *
- * @param {http.ServerResponse} response
- * @param {Object} productData JSON data from request boy
- * @param {Object} currentUser moongoose document object
+ * @param {object} response http.ServerResponse
+ * @param {object} productData JSON data from request boy
+ * @returns {object} created product as json
  */
-const registerProduct = async (response, productData) =>{
+const registerProduct = async (response, productData) => {
   if (productData.price <= 0){
       return responseUtils.badRequest(response, "Invalid price");
   }
@@ -37,15 +38,15 @@ const registerProduct = async (response, productData) =>{
   });
   await newProduct.save();
   return responseUtils.createdResource(response, newProduct);
-}
+};
 
 
 /**
  * Send product data as JSON
  *
- * @param {http.ServerResponse} response
- * @param {Object} productId 
- * @param {Object} currentUser moongoose document object
+ * @param {object} response http.ServerResponse
+ * @param {string} productId products ID
+ * @returns {object} either product as json or not found
  */
 const viewProduct = async (response, productId) => {
   const Product = await require('../models/product');
@@ -56,15 +57,15 @@ const viewProduct = async (response, productId) => {
   else{
     return responseUtils.sendJson(response, vProduct);
   }
-}
+};
 
 /**
  * Update product and send updated product as JSON
  *
- * @param {http.ServerResponse} response
- * @param {Object} productId 
- * @param {Object} currentUser moongoose document object
- * @param {Object} productData JSON data from request body
+ * @param {object} response http.ServerResponse
+ * @param {string} productId products ID 
+ * @param {object} productData JSON data from request body
+ * @returns {object} response
  */
 const updateProduct = async (response, productId, productData) => {
   const Product = await require('../models/product');
@@ -82,9 +83,15 @@ const updateProduct = async (response, productId, productData) => {
   });
   await fProduct.save();
   return responseUtils.sendJson(response, fProduct);
-}
+};
 
-
+/**
+ * Delete product and send deleted product as JSON
+ *
+ * @param {object} response http.ServerResponse
+ * @param {string} productId products ID 
+ * @returns {object} response
+ */
 const deleteProduct = async (response, productId) => {
   const Product = await require('../models/product');
   const fProduct = await Product.findById(productId).exec();
@@ -93,5 +100,6 @@ const deleteProduct = async (response, productId) => {
   }
   await Product.deleteOne({_id: productId}).then(() => 
   responseUtils.sendJson(response, fProduct));
-}
+};
+
 module.exports = { getAllProducts, registerProduct, updateProduct, deleteProduct};

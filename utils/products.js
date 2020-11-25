@@ -23,7 +23,7 @@ const resetProducts = () => {
  * Returns copies of the products and not the originals
  * to prevent modifying them outside of this module.
  *
- * @returns {Array<Object>} all products
+ * @returns {Array<object>} all products
  */
 const getAllProducts = () => {
   const productData = data.products;

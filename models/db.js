@@ -12,7 +12,10 @@ const getDbUrl = () => {
   // TODO: 9.3 Implement this
   return process.env.DBURL !== undefined ? process.env.DBURL : 'mongodb://localhost:27017/WebShopDb';
 };
-
+/**
+ * Connect to DB
+ *
+ */
 function connectDB () {
   // Do nothing if already connected
   if (!mongoose.connection || mongoose.connection.readyState === 0) {
@@ -35,11 +38,23 @@ function connectDB () {
   }
 }
 
+/**
+ * Handle critical errors
+ * 
+ * Handles critical errors by throwing error
+ * 
+ * @param {object} err error
+ * @throws {object} error
+ */
 function handleCriticalError (err) {
   console.error(err);
   throw err;
 }
 
+/**
+ * Disconnect from DB
+ *
+ */
 function disconnectDB () {
   mongoose.disconnect();
 }

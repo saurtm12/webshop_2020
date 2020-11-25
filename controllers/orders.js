@@ -3,19 +3,21 @@ const responseUtils = require('../utils/responseUtils');
 /**
  * get all orders and send json (with admin)
  *
- * @param {http.ServerResponse} response
+ * @param {object} response http.ServerResponse
+ * @returns {object} all orders
  */
 const getAllOrders = async response => {
     const Order = await require("../models/order");
     const orderData = await Order.find({});
     return responseUtils.sendJson(response, orderData);
-}
+};
 
 /**
  * view an order with admin
  *
- * @param {http.ServerResponse} response
- * @param orderId
+ * @param {object} response http.ServerResponse
+ * @param {string} orderId ID of the order
+ * @returns {object} response?
  */
 const viewOrder = async (response, orderId) => {
     const Order = await require("../models/order");
@@ -25,28 +27,30 @@ const viewOrder = async (response, orderId) => {
         return responseUtils.notFound(response);
     }
     return responseUtils.sendJson(response, order);
-}
+};
 
 /**
  * Register orders of a customer
  *
- * @param {http.ServerResponse} response
- * @param cId : customer Id, assume that cId has been in our database
+ * @param {object} response http.ServerResponse
+ * @param {string} cId : customer Id, assume that cId has been in our database
+ * @returns {object} response
  */
 const viewOrdersByCustomer = async (response, cId) => {
     const Order = await require("../models/order");
     const orderData = await Order.find({customerId : cId}).exec();
     return responseUtils.sendJson(response, orderData);
-}
+};
 
 /**
  * Register new order and send back as JSON
  *
- * @param {http.ServerResponse} response
- * @param {Object} orderData JSON data from request body
- * @param cId : customer Id, assume that cId has been in our database
+ * @param {object} response http.ServerResponse
+ * @param {object} orderData JSON data from request body
+ * @param {string} cId : customer Id, assume that cId has been in our database
+ * @returns {object} response
  */
-const registerOrder = async (resonse, orderData, cId) => {
+const registerOrder = async (response, orderData, cId) => {
     if (!orderData){
         responseUtils.badRequest(response, "Body order is empty");
     }
@@ -60,7 +64,7 @@ const registerOrder = async (resonse, orderData, cId) => {
     await newOrder.validate();
     await newOrder.save();
     return responseUtils.createdResource(response, newOrder);
-}
+};
 
 const viewOrderByCustomer = async (response, orderId, cId) => {
     const Order = await require("../models/order");
@@ -72,5 +76,5 @@ const viewOrderByCustomer = async (response, orderId, cId) => {
         return responseUtils.notFound(response);
     }
     return responseUtils.sendJson(response, fOrder);
-} 
+};
 module.exports = {getAllOrders, viewOrder, viewOrdersByCustomer, viewOrderByCustomer, registerOrder};

@@ -72,6 +72,11 @@ window.onload = function() {
     });
 };
 
+/**
+ * Modify texts
+ *
+ * @param {object} event event
+ */
 function modify(event){
     const buttonId = event.target.id;
     const splittedButtonId = buttonId.split("-");
@@ -172,11 +177,22 @@ function modify(event){
     modifyUserContainer.append(clone);
 }
 
+/**
+ * Submit form
+ *
+ * @param {object} event http.ServerResponse
+ * @param {string} name JSON data from request body
+ */
 function submitForm(event, name) {
     removeElement("modify-user", "edit-user-form");
     createNotification(`Updated user ${name}`, "notifications-container", true);
 }
 
+/**
+ * Remove item
+ *
+ * @param {object} event http.ServerResponse
+ */
 function remove(event) {
     const id = event.target.id;
     const parsedId = id.split("-");

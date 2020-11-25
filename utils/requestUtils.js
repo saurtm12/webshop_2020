@@ -2,7 +2,7 @@
  * Decode, parse and return user credentials (username and password)
  * from the Authorization header.
  *
- * @param {http.incomingMessage} request
+ * @param {object} request http.incomingMessage
  * @returns {Array|null} [username, password] or null if header is missing
  */
 const getCredentials = request => {
@@ -24,8 +24,8 @@ const getCredentials = request => {
 /**
  * Does the client accept JSON responses?
  *
- * @param {http.incomingMessage} request
- * @returns {boolean}
+ * @param {object} request http.incomingMessage
+ * @returns {boolean} True if client accepts json, otherwise false
  */
 const acceptsJson = request => {
   // TODO: 8.3 Check if the client accepts JSON as a response based on "Accept" request header
@@ -48,8 +48,8 @@ const acceptsJson = request => {
 /**
  * Is the client request content type JSON?
  *
- * @param {http.incomingMessage} request
- * @returns {boolean}
+ * @param {object} request http.incomingMessage
+ * @returns {boolean} If json -> true, else false
  */
 const isJson = request => {
   // TODO: 8.3 Check whether request "Content-Type" is JSON or not
@@ -73,7 +73,7 @@ const isJson = request => {
  *     // Do something with the json
  *   })
  *
- * @param {http.IncomingMessage} request
+ * @param {object} request http.IncomingMessage
  * @returns {Promise<*>} Promise resolves to JSON content of the body
  */
 const parseBodyJson = request => {

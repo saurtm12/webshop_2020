@@ -32,8 +32,10 @@ const resetUsers = () => {
 };
 
 /**
+ * 
  * Generate a random string for use as user ID
- * @returns {string}
+ * 
+ * @returns {string} ID as string
  */
 const generateId = () => {
   let id;
@@ -43,7 +45,7 @@ const generateId = () => {
       return giveId();
     }
     return id;
-  }
+  };
 
   // do {
   //   // Generate unique random id that is not already in use
@@ -59,8 +61,8 @@ const generateId = () => {
 /**
  * Check if email is already in use by another user
  *
- * @param {string} email
- * @returns {boolean}
+ * @param {string} email Email to check
+ * @returns {boolean} True if email used, false otherwise
  */
 const emailInUse = email => {
   // TODO: 8.3 Check if there already exists a user with a given email
@@ -78,9 +80,9 @@ const emailInUse = email => {
  * Returns a copy of the found user and not the original
  * to prevent modifying the user outside of this module.
  *
- * @param {string} email
- * @param {string} password
- * @returns {Object|undefined}
+ * @param {string} email Email of the user to get
+ * @param {string} password Password of the user to get
+ * @returns {object|undefined} Object if user found, else undefined
  */
 const getUser = (email, password) => {
   // TODO: 8.3 Get user whose email and password match the provided values
@@ -96,8 +98,8 @@ const getUser = (email, password) => {
  * Returns a copy of the user and not the original
  * to prevent modifying the user outside of this module.
  *
- * @param {string} userId
- * @returns {Object|undefined}
+ * @param {string} userId Id of the user to get.
+ * @returns {object|undefined} Object if user found, else undefined
  */
 const getUserById = userId => {
   // TODO: 8.3 Find user by user id
@@ -110,8 +112,8 @@ const getUserById = userId => {
 /**
  * Delete user by its ID and return the deleted user
  *
- * @param {string} userId
- * @returns {Object|undefined} deleted user or undefined if user does not exist
+ * @param {string} userId Id of the user to be deleted
+ * @returns {object|undefined} deleted user or undefined if user does not exist
  */
 const deleteUserById = userId => {
   // TODO: 8.3 Delete user with a given id
@@ -129,7 +131,7 @@ const deleteUserById = userId => {
  * Returns copies of the users and not the originals
  * to prevent modifying them outside of this module.
  *
- * @returns {Array<Object>} all users
+ * @returns {Array<object>} all users
  */
 const getAllUsers = () => {
   // TODO: 8.3 Retrieve all users
@@ -147,8 +149,8 @@ const getAllUsers = () => {
  *
  * DO NOT MODIFY OR OVERWRITE users.json
  *
- * @param {Object} user
- * @returns {Object} copy of the created user
+ * @param {object} user User to be saved
+ * @returns {object} copy of the created user
  */
 const saveNewUser = user => {
   // TODO: 8.3 Save new user
@@ -172,9 +174,9 @@ const saveNewUser = user => {
  * Returns a copy of the user and not the original
  * to prevent modifying the user outside of this module.
  *
- * @param {string} userId
+ * @param {string} userId Id of user as string
  * @param {string} role "customer" or "admin"
- * @returns {Object|undefined} copy of the updated user or undefined if user does not exist
+ * @returns {object|undefined} copy of the updated user or undefined if user does not exist
  * @throws {Error} error object with message "Unknown role"
  */
 const updateUserRole = (userId, role) => {
@@ -200,7 +202,7 @@ const updateUserRole = (userId, role) => {
  * This function can be used to validate that user has all required
  * fields before saving it.
  *
- * @param {Object} user user object to be validated
+ * @param {object} user user object to be validated
  * @returns {Array<string>} Array of error messages or empty array if user is valid
  */
 const validateUser = user => {

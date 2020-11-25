@@ -37,6 +37,13 @@ getJSON("/api/products").then(products => {
     });
 })
 
+/**
+ * Add product to cart.
+ *
+ * @param {string} productName Name of the product
+ * @param {string} productId ID of the product
+ * @param {object} product Product object
+ */
 function addToCart(productName, productId, product) {
     createNotification(`Added ${productName} to cart!`, "notifications-container", true);
     let storageItem = sessionStorage.getItem(productId);

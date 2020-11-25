@@ -30,7 +30,13 @@ const userSchema = new Schema({
   }
 });
 
- function hashPassword(password) {
+/**
+ * Hash supplied password and return the hashed password
+ *
+ * @param {string} password password to hash
+ * @returns {string} hashed password
+ */
+function hashPassword(password) {
   if(password.length < 10) return;
   const saltRounds = 10;
   const hashed = bcrypt.hashSync(password, saltRounds);
@@ -40,7 +46,7 @@ const userSchema = new Schema({
 /**
  * Compare supplied password with user's own (hashed) password
  *
- * @param {string} password
+ * @param {string} password password to check
  * @returns {Promise<boolean>} promise that resolves to the comparison result
  */
 userSchema.methods.checkPassword = function (password) {

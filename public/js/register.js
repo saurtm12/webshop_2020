@@ -9,6 +9,10 @@
  */
 document.getElementById("btnRegister").addEventListener('click', register);
 
+/**
+ * Register.
+ *
+ */
 function register(){
     event.preventDefault();
     const registerForm = document.getElementById("register-form");

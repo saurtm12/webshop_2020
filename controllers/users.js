@@ -1,7 +1,7 @@
 /**
  * Send all users as JSON
  *
- * @param {http.ServerResponse} response
+ * @param {object} response http.ServerResponse
  */
 const responseUtils = require('../utils/responseUtils');
 
@@ -14,9 +14,10 @@ const getAllUsers = async response => {
 /**
  * Delete user and send deleted user as JSON
  *
- * @param {http.ServerResponse} response
- * @param {string} userId
- * @param {Object} currentUser (mongoose document object)
+ * @param {object} response http.ServerResponse
+ * @param {string} userId Id of the user
+ * @param {object} currentUser (mongoose document object)
+ * @returns {object} response
  */
 const deleteUser = async (response, userId, currentUser) => {
   const User = await require('../models/user');
@@ -34,10 +35,11 @@ const deleteUser = async (response, userId, currentUser) => {
 /**
  * Update user and send updated user as JSON
  *
- * @param {http.ServerResponse} response
- * @param {string} userId
- * @param {Object} currentUser (mongoose document object)
- * @param {Object} userData JSON data from request body
+ * @param {object} response http.ServerResponse
+ * @param {string} userId Id of the user
+ * @param {object} currentUser (mongoose document object)
+ * @param {object} userData JSON data from request body
+ * @returns {object} response
  */
 const updateUser = async (response, userId, currentUser, userData) => {
   if (userId === currentUser.id){
@@ -62,9 +64,10 @@ const updateUser = async (response, userId, currentUser, userData) => {
 /**
  * Send user data as JSON
  *
- * @param {http.ServerResponse} response
- * @param {string} userId
- * @param {Object} currentUser (mongoose document object)
+ * @param {object} response http.ServerResponse
+ * @param {string} userId Id of the user
+ * @param {object} currentUser (mongoose document object)
+ * @returns {object} response
  */
 const viewUser = async (response, userId, currentUser) => {
   const User = await require('../models/user');
@@ -82,8 +85,9 @@ const viewUser = async (response, userId, currentUser) => {
 /**
  * Register new user and send created user back as JSON
  *
- * @param {http.ServerResponse} response
- * @param {Object} userData JSON data from request body
+ * @param {object} response http.ServerResponse
+ * @param {object} userData JSON data from request body
+ * @returns {void}
  */
 const registerUser = async (response, userData) => {
   const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
