@@ -4,11 +4,11 @@ const products = require('../controllers/products');
 
 const orderedItemSchema = new Schema({
     product: {
-        productId: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-            trim: true
-        },
+        // productId: {
+        //     type: String,
+        //     required: true,
+        //     trim: true
+        // },
         name: {
             type: String,
             minlength: 1,
@@ -33,14 +33,14 @@ const orderedItemSchema = new Schema({
 
 const orderSchema = new Schema({
     customerId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: 'User',
         required: true,
         trim: true
     },
     items: {
         type: [orderedItemSchema],
-        validate: function() { return this.products.length >= 1; },
+        //validate: function() { return this.products.length >= 1; },
         description: "Array of order items. Each item must have a COPY of the product information (no image) and the amount of products ordered"
     }
 });

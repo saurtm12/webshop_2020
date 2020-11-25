@@ -50,13 +50,13 @@ const registerProduct = async (response, productData) => {
  */
 const viewProduct = async (response, productId) => {
   const Product = await require('../models/product');
-  const vProduct = await Product.findById(productId).exec();
-  if (!vProduct){
-    return responseUtils.notFound(response);
-  }
-  else{
-    return responseUtils.sendJson(response, vProduct);
-  }
+  // const vProduct = await Product.findById(productId).exec();
+  // if (!vProduct){
+  //   return responseUtils.notFound(response);
+  // }
+  // else{
+  //   return responseUtils.sendJson(response, vProduct);
+  // }
 };
 
 /**
@@ -102,4 +102,4 @@ const deleteProduct = async (response, productId) => {
   responseUtils.sendJson(response, fProduct));
 };
 
-module.exports = { getAllProducts, registerProduct, updateProduct, deleteProduct};
+module.exports = { getAllProducts, registerProduct, updateProduct, deleteProduct, viewProduct };

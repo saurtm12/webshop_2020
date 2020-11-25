@@ -92,4 +92,19 @@ const parseBodyJson = request => {
   });
 };
 
-module.exports = { acceptsJson, getCredentials, isJson, parseBodyJson };
+/**
+ * Check if data is valid json
+ *
+ * @param {object} data Data to check
+ * @returns {boolean} True if valid, otherwise false
+ */
+const isValidJson = data => {
+  try {
+    JSON.parse(data);
+  } catch (e) {
+      return false;
+  }
+  return true;
+};
+
+module.exports = { acceptsJson, getCredentials, isJson, parseBodyJson, isValidJson };
