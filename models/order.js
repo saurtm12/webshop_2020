@@ -4,12 +4,11 @@ const Product = require('./product');
 
 const orderedItemSchema = new Schema({
     product: {
-        // productId: {
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: 'Product',
-        //     required: true,
-        //     trim: true
-        // },
+        _id: {
+            type: 'ObjectId',
+            ref: 'Product',
+            required: true,
+        },
         name: {
             type: String,
             minlength: 1,
@@ -34,10 +33,9 @@ const orderedItemSchema = new Schema({
 
 const orderSchema = new Schema({
     customerId: {
-        type: String,
+        type: 'ObjectId',
         ref: 'User',
         required: true,
-        trim: true
     },
     items: {
         type: [orderedItemSchema],
@@ -46,8 +44,10 @@ const orderSchema = new Schema({
     }
 });
 
-orderSchema.set('toJSON', { virtuals: false, versionKey: false });
+orderSchema.set('toJSON', { virtuals: false, versionKey: false});
+orderSchema.set('autoIndex',false);
 orderedItemSchema.set('toJSON', { virtuals: false, versionKey: false});
+orderSchema.set('autoIndex',false);
 
 const Order = new mongoose.model('Order', orderSchema);
 module.exports = Order;
