@@ -54,17 +54,18 @@ const viewOrdersByCustomer = async (response, cId) => {
 const registerOrder = async (response, orderData, cId) => {
     console.log(orderData);
     console.log(orderData.items);
+    console.log('QUANTITY:', orderData.items);
+    
     if (!orderData){
-        responseUtils.badRequest(response, "Body order is empty");
+        return responseUtils.badRequest(response, "Body order is empty");
     }
+    
     if (orderData.items.length < 1){
-        responseUtils.badRequest(response, "Order is empty");
+        return responseUtils.badRequest(response, "Order is empty");
     }
-    if (!orderData.items[0].product) {
-        responseUtils.badRequest(response, "Product is missing");
-    }
-    if (!orderData.items[0].quantity) {
-        responseUtils.badRequest(response, "Quantity is missing");
+    const wrongData = orderData.items.find(item => !item.quantity || !item.product || (item.product && !item.product._id) ||(item.product && !item.product.price) || (item.product && !item.product.name));
+    if (wrongData) {
+        return responseUtils.badRequest(response, "Product/Quantity/Product id is missing");
     }
     const Order = await require("../models/order");
 
