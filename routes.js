@@ -276,10 +276,9 @@ const handleRequest = async (request, response) => {
       return responseUtils.basicAuthChallenge(response);
     }
 
-    // TODO return customers own orders
-    // if(current.role === 'customer') {
-    //   orderController.viewOrdersByCustomer(response, )
-    // }
+    if(current.role === 'customer') {
+      return orderController.viewOrdersByCustomer(response, current._id );
+    }
     return orderController.getAllOrders(response);
   }
   if (filePath === '/api/orders' && method.toUpperCase() === 'POST') {
