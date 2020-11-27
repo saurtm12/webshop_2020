@@ -1,17 +1,13 @@
 const responseUtils = require('./utils/responseUtils');
-const { acceptsJson, isJson, parseBodyJson, getCredentials, isValidJson} = require('./utils/requestUtils');
+const { acceptsJson, isJson, parseBodyJson, getCredentials} = require('./utils/requestUtils');
 const { renderPublic } = require('./utils/render');
 const { emailInUse, saveNewUser, validateUser, generateId, getUser, getUserById, updateUserRole, deleteUserById } = require('./utils/users');
 const fs = require('fs');
 const { sendJson, basicAuthChallenge} = require('./utils/responseUtils');
-const { userInfo } = require('os');
-const { parse } = require('path');
 const { getCurrentUser } = require('./auth/auth');
-const { getAllProducts, registerProduct, viewProduct } = require('./controllers/products');
+const { getAllProducts, registerProduct, viewProduct, deleteProduct, updateProduct } = require('./controllers/products');
 const userController = require('./controllers/users');
 const orderController = require('./controllers/orders');
-const User = require('./models/user');
-const { match } = require('assert');
 /**
  * Known API routes and their allowed methods
  *
@@ -21,7 +17,7 @@ const { match } = require('assert');
 const allowedMethods = {
   '/api/register': ['POST'],
   '/api/users': ['GET'],
-  '/api/products': ['GET', 'POST'],
+  '/api/products': ['GET', 'POST', 'PUT', 'DELETE'],
   '/api/orders': ['GET', 'POST']
 };
 
@@ -87,24 +83,57 @@ const handleRequest = async (request, response) => {
     return renderPublic(fileName, response);
   }
 
+  if (matchOrderId(filePath)) {
+    const credential = getCredentials(request);
+    const orderId = filePath.split('/')[3];
+    if (credential !== null) {
+      const authorizedUser = await getCurrentUser(request);
+      if (authorizedUser === null) {
+        return basicAuthChallenge(response);
+      }
+      if (!acceptsJson(request)) {
+        return responseUtils.contentTypeNotAcceptable(response);
+      }
+      if (method.toUpperCase() === 'GET') {
+        return await orderController.viewOrder(response, orderId);
+      }
+    } else {
+      basicAuthChallenge(response);
+    }
+  }
+
   if (matchProductId(filePath)) {
     const credential = getCredentials(request);
     const productId = filePath.split('/')[3];
     if (credential !== null) {
       const authorizedUser = await getCurrentUser(request);
       if (authorizedUser === null) {
-        basicAuthChallenge(response);
+        return basicAuthChallenge(response);
       }
       if (!acceptsJson(request)) {
         return responseUtils.contentTypeNotAcceptable(response);
       }
       if (method.toUpperCase() === 'GET') {
-        return viewProduct(response, productId);
+        return await viewProduct(response, productId);
       }
       if (method.toUpperCase() === 'PUT') {
-        if (current.role === 'customer') {
+        if (authorizedUser === null) {
+          return basicAuthChallenge(response);
+        }
+        if (authorizedUser.role === 'customer') {
           return responseUtils.forbidden(response);
         }
+        const body = await parseBodyJson(request);
+        return await updateProduct(response, productId, body);
+      }
+      if (method.toUpperCase() === 'DELETE') {
+        if (authorizedUser === null) {
+          return basicAuthChallenge(response);
+        }
+        if (authorizedUser.role === 'customer') {
+          return responseUtils.forbidden(response);
+        }
+        return deleteProduct(response, productId);
       }
     } else {
       basicAuthChallenge(response);
@@ -192,14 +221,11 @@ const handleRequest = async (request, response) => {
     if (current.role === 'customer') {
       return responseUtils.forbidden(response);
     }
+    if(!isJson(request)) {
+      return responseUtils.badRequest(response, "Invalid json");
+    }
     const productData = await parseBodyJson(request);
-    if (!productData.name.length < 1 || !productData.price.length < 1) {
-      return responseUtils.badRequest(response);
-    }
-    if(await !isValidJson(JSON.stringify(productData))) {
-      return responseUtils.badRequest(response);
-    }
-    return registerProduct(response, productData);
+    return await registerProduct(response, productData);
   }
 
 
@@ -249,6 +275,11 @@ const handleRequest = async (request, response) => {
     if(current === null) {
       return responseUtils.basicAuthChallenge(response);
     }
+
+    // TODO return customers own orders
+    // if(current.role === 'customer') {
+    //   orderController.viewOrdersByCustomer(response, )
+    // }
     return orderController.getAllOrders(response);
   }
   if (filePath === '/api/orders' && method.toUpperCase() === 'POST') {
@@ -263,7 +294,15 @@ const handleRequest = async (request, response) => {
     if(current === null) {
       return responseUtils.basicAuthChallenge(response);
     }
-    return orderController.registerOrder(response);
+    if (current.role === 'admin') {
+      return responseUtils.forbidden(response);
+    }
+    if (!isJson(request)) {
+      return responseUtils.badRequest(response, 'Invalid Content-Type. Expected application/json');
+    }
+    const body = await parseBodyJson(request);
+    console.log(body);
+    return await orderController.registerOrder(response, body);
   }
 };
 

@@ -9,13 +9,6 @@ const productSchema = new Schema({
         required: true,
         trim: true
     },
-    description: {
-        type: String,
-        minlength: 10,
-        maxlength: 150,
-        required: true,
-        trim: true
-    },
     price: {
         type: Number,
         required: true,
@@ -24,14 +17,20 @@ const productSchema = new Schema({
             return this.price > 0;
         }
     },
-    img: {
+    image: {
         type: String,
         trim: true,
-        match: "(http|https):\/\/\S+\.\S+\/?\S*"
+       // match: "(http|https):\/\/\S+\.\S+\/?\S*"
+    },
+    description: {
+        type: String,
+        minlength: 10,
+        maxlength: 150,
+        trim: true
     }
 });
 
 // Omit the version key when serialized to JSON
 productSchema.set('toJSON', {virtuals: false, versionKey: false});
-const Product = new mongoose.model('Product',productSchema);
+const Product = new mongoose.model('Product', productSchema);
 module.exports = Product;

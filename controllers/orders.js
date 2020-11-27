@@ -22,10 +22,10 @@ const getAllOrders = async response => {
 const viewOrder = async (response, orderId) => {
     const Order = await require("../models/order");
     const order = await Order.findById(orderId).exec();
-    if (!order)
-    {
+    if (!order) {
         return responseUtils.notFound(response);
     }
+
     return responseUtils.sendJson(response, order);
 };
 
@@ -51,12 +51,21 @@ const viewOrdersByCustomer = async (response, cId) => {
  * @returns {object} response
  */
 const registerOrder = async (response, orderData, cId) => {
-    if (!orderData){
-        responseUtils.badRequest(response, "Body order is empty");
-    }
-    if (orderData["items"].length <1){
+    if(!orderData || orderData.items.length === 0 || orderData.items === undefined) {
         responseUtils.badRequest(response, "Order is empty");
     }
+    if (!orderData.items[0].product) {
+        responseUtils.badRequest(response, "Product is missing");
+    }
+    if (!orderData.items[0].quantity) {
+        responseUtils.badRequest(response, "Price is missing");
+    }
+    // if (!orderData){
+    //     responseUtils.badRequest(response, "Body order is empty");
+    // }
+    // if (orderData["items"].length <1){
+    //     responseUtils.badRequest(response, "Order is empty");
+    // }
     const Order = await require("../models/order");
 
     const newOrder = new Order({customerId: cId,

@@ -28,8 +28,10 @@ const deleteUser = async (response, userId, currentUser) => {
   if (userId === currentUser.id){
     return responseUtils.badRequest(response, "Bad request");
   }
-  await User.deleteOne({_id: userId}).then(() => 
-    responseUtils.sendJson(response, fUser));
+  // await User.deleteOne({_id: userId}).then(() => 
+  //   responseUtils.sendJson(response, fUser));
+  await User.deleteOne({_id: userId});
+  responseUtils.sendJson(response, fUser);
 };
 
 /**

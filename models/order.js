@@ -4,25 +4,26 @@ const Product = require('./product');
 
 const orderedItemSchema = new Schema({
     product: {
-        _id: {
-            type: 'ObjectId',
-            ref: 'Product',
-            required: true,
-        },
-        name: {
-            type: String,
-            minlength: 1,
-            required: true,
-            trim: true
-        },
-        price: {
-            type: Number,
-            required: true,
-            description: "price of one product in Euros, without the Euro sign (€). Euros and cents are in the same float, with cents coming after the decimal point",
-            validate: function() {
-                return this.product.price > 0;
-            }
-        }
+        type: Schema.ObjectId, ref: 'Product'
+        // _id: {
+        //     type: mongoose.Schema.Types.ObjectId,
+        //     ref: 'Product',
+        //     required: true,
+        // },
+        // name: {
+        //     type: String,
+        //     minlength: 1,
+        //     required: true,
+        //     trim: true
+        // },
+        // price: {
+        //     type: Number,
+        //     required: true,
+        //     description: "price of one product in Euros, without the Euro sign (€). Euros and cents are in the same float, with cents coming after the decimal point",
+        //     validate: function() {
+        //         return this.product.price > 0;
+        //     }
+        // }
     },
     quantity: {
         type: Number,
@@ -33,7 +34,7 @@ const orderedItemSchema = new Schema({
 
 const orderSchema = new Schema({
     customerId: {
-        type: 'ObjectId',
+        type: String,
         ref: 'User',
         required: true,
     },
@@ -45,9 +46,9 @@ const orderSchema = new Schema({
 });
 
 orderSchema.set('toJSON', { virtuals: false, versionKey: false});
-orderSchema.set('autoIndex',false);
+orderSchema.set('autoIndex', false);
 orderedItemSchema.set('toJSON', { virtuals: false, versionKey: false});
-orderSchema.set('autoIndex',false);
+orderSchema.set('autoIndex', false);
 
 const Order = new mongoose.model('Order', orderSchema);
 module.exports = Order;

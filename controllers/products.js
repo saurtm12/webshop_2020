@@ -4,6 +4,7 @@
  * @param {object} response http.ServerResponse
  * @returns {object} response
  */
+const { isJson} = require('../utils/requestUtils');
 const responseUtils = require('../utils/responseUtils');
 const { sendJson } = require('../utils/responseUtils');
 
@@ -21,20 +22,25 @@ const getAllProducts = async response => {
  * @returns {object} created product as json
  */
 const registerProduct = async (response, productData) => {
-  if (productData.price <= 0){
+  if (!productData.price || (productData.price && productData.price <= 0)){
       return responseUtils.badRequest(response, "Invalid price");
   }
-  const pattern = "(http|https):\/\/\S+\.\S+\/?\S*";
-  const regex = new RegExp(pattern);
-  if (!regex.test(userData.email))
-  {
-    return responseUtils.badRequest(response, "Image resource is not valid");
+  if(!productData.name) {
+    return responseUtils.badRequest(response, "Invalid name");
   }
+  // const pattern = "(http|https):\/\/\S+\.\S+\/?\S*";
+  // const regex = new RegExp(pattern);
+  // if (!regex.test(userData.email))
+  // {
+  //   return responseUtils.badRequest(response, "Image resource is not valid");
+  // }
+
   const Product = await require('../models/product');
   const newProduct = new Product({
     name: productData.name,
     description: productData.description,
-    price: productData.price
+    price: productData.price,
+    image: productData.image
   });
   await newProduct.save();
   return responseUtils.createdResource(response, newProduct);
@@ -50,13 +56,13 @@ const registerProduct = async (response, productData) => {
  */
 const viewProduct = async (response, productId) => {
   const Product = await require('../models/product');
-  // const vProduct = await Product.findById(productId).exec();
-  // if (!vProduct){
-  //   return responseUtils.notFound(response);
-  // }
-  // else{
-  //   return responseUtils.sendJson(response, vProduct);
-  // }
+  const vProduct = await Product.findById(productId).exec();
+  if (!vProduct){
+    return responseUtils.notFound(response);
+  }
+  else{
+    return responseUtils.sendJson(response, vProduct);
+  }
 };
 
 /**
@@ -68,21 +74,32 @@ const viewProduct = async (response, productId) => {
  * @returns {object} response
  */
 const updateProduct = async (response, productId, productData) => {
+
+  if (!productData.name) {
+    return responseUtils.badRequest(response, "Missing name");
+  }
+  if(productData.price <= 0) {
+    return responseUtils.badRequest(response, "Invalid price");
+  }
+
   const Product = await require('../models/product');
   const fProduct = await Product.findById(productId).exec();
 
   if (!fProduct){
     return responseUtils.notFound(response);
   }
-
-  if (productData.price <= 0){
-    return responseUtils.badRequest(response, "Invalid price");
-  }
+  
   Object.entries(productData).forEach((key, value) => {
     fProduct[key] = value;
   });
+
   await fProduct.save();
-  return responseUtils.sendJson(response, fProduct);
+  
+  productData = {
+    '_id': productId,
+    ...productData
+  };
+  return responseUtils.sendJson(response, productData);
 };
 
 /**
