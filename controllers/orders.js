@@ -52,10 +52,6 @@ const viewOrdersByCustomer = async (response, cId) => {
  * @returns {object} response
  */
 const registerOrder = async (response, orderData, cId) => {
-    console.log(orderData);
-    console.log(orderData.items);
-    console.log('QUANTITY:', orderData.items);
-    
     if (!orderData){
         return responseUtils.badRequest(response, "Body order is empty");
     }
@@ -70,10 +66,7 @@ const registerOrder = async (response, orderData, cId) => {
     const Order = await require("../models/order");
 
     const newOrder = new Order({customerId : orderData.items[0].product["_id"], ...orderData});
-    // await newOrder.validate();
-    const test = await newOrder.save();
-    console.log(test);
-    //const returnedOrder = {customerId: orderData.items[0].product["_id"], ...newOrder}
+    await newOrder.save();
     return responseUtils.createdResource(response, newOrder);
 };
 
