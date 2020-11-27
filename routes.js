@@ -95,11 +95,10 @@ const handleRequest = async (request, response) => {
         return responseUtils.contentTypeNotAcceptable(response);
       }
       if (method.toUpperCase() === 'GET') {
-        const currentUser = await getCurrentUser(request);
-        if(currentUser.role === 'admin') {
+        if(authorizedUser.role === 'admin') {
           return await orderController.viewOrder(response, orderId);
         }
-        return await orderController.viewOrderByCustomer(response, orderId, currentUser._id);
+        return await orderController.viewOrderByCustomer(response, orderId, authorizedUser._id);
       }
     } else {
       basicAuthChallenge(response);

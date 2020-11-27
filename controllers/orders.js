@@ -76,11 +76,6 @@ const viewOrderByCustomer = async (response, orderId, cId) => {
     if (!fOrder){
         return responseUtils.notFound(response);
     }
-    console.log(fOrder.customerId);
-    console.log(cId);
-    // if (fOrder.customerId !== cId){
-    //     return responseUtils.notFound(response);
-    // }
     return responseUtils.sendJson(response, fOrder);
 };
 module.exports = {getAllOrders, viewOrder, viewOrdersByCustomer, viewOrderByCustomer, registerOrder};
