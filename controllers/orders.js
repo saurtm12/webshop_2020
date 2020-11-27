@@ -72,13 +72,15 @@ const registerOrder = async (response, orderData, cId) => {
 
 const viewOrderByCustomer = async (response, orderId, cId) => {
     const Order = await require("../models/order");
-    const fOrder = await Order.findById(orderId).exec();
+    const fOrder = await Order.findOne({_id: orderId, customerId: cId}).exec();
     if (!fOrder){
         return responseUtils.notFound(response);
     }
-    if (fOrder.customerId !== cId){
-        return responseUtils.notFound(response);
-    }
+    console.log(fOrder.customerId);
+    console.log(cId);
+    // if (fOrder.customerId !== cId){
+    //     return responseUtils.notFound(response);
+    // }
     return responseUtils.sendJson(response, fOrder);
 };
 module.exports = {getAllOrders, viewOrder, viewOrdersByCustomer, viewOrderByCustomer, registerOrder};

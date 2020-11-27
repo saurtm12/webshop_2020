@@ -95,7 +95,11 @@ const handleRequest = async (request, response) => {
         return responseUtils.contentTypeNotAcceptable(response);
       }
       if (method.toUpperCase() === 'GET') {
-        return await orderController.viewOrder(response, orderId);
+        const currentUser = await getCurrentUser(request);
+        if(currentUser.role === 'admin') {
+          return await orderController.viewOrder(response, orderId);
+        }
+        return await orderController.viewOrderByCustomer(response, orderId, currentUser._id);
       }
     } else {
       basicAuthChallenge(response);
@@ -300,7 +304,6 @@ const handleRequest = async (request, response) => {
       return responseUtils.badRequest(response, 'Invalid Content-Type. Expected application/json');
     }
     const body = await parseBodyJson(request);
-    console.log(body);
     return await orderController.registerOrder(response, body);
   }
 };
