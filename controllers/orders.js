@@ -1,3 +1,4 @@
+const { interfaces } = require('mocha');
 const responseUtils = require('../utils/responseUtils');
 
 /**
@@ -51,27 +52,27 @@ const viewOrdersByCustomer = async (response, cId) => {
  * @returns {object} response
  */
 const registerOrder = async (response, orderData, cId) => {
-    if(!orderData || orderData.items.length === 0 || orderData.items === undefined) {
+    console.log(orderData);
+    console.log(orderData.items);
+    if (!orderData){
+        responseUtils.badRequest(response, "Body order is empty");
+    }
+    if (orderData.items.length < 1){
         responseUtils.badRequest(response, "Order is empty");
     }
     if (!orderData.items[0].product) {
         responseUtils.badRequest(response, "Product is missing");
     }
     if (!orderData.items[0].quantity) {
-        responseUtils.badRequest(response, "Price is missing");
+        responseUtils.badRequest(response, "Quantity is missing");
     }
-    // if (!orderData){
-    //     responseUtils.badRequest(response, "Body order is empty");
-    // }
-    // if (orderData["items"].length <1){
-    //     responseUtils.badRequest(response, "Order is empty");
-    // }
     const Order = await require("../models/order");
 
-    const newOrder = new Order({customerId: cId,
-                                items: orderData});
-    await newOrder.validate();
-    await newOrder.save();
+    const newOrder = new Order({customerId : orderData.items[0].product["_id"], ...orderData});
+    // await newOrder.validate();
+    const test = await newOrder.save();
+    console.log(test);
+    //const returnedOrder = {customerId: orderData.items[0].product["_id"], ...newOrder}
     return responseUtils.createdResource(response, newOrder);
 };
 

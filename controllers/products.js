@@ -28,12 +28,6 @@ const registerProduct = async (response, productData) => {
   if(!productData.name) {
     return responseUtils.badRequest(response, "Invalid name");
   }
-  // const pattern = "(http|https):\/\/\S+\.\S+\/?\S*";
-  // const regex = new RegExp(pattern);
-  // if (!regex.test(userData.email))
-  // {
-  //   return responseUtils.badRequest(response, "Image resource is not valid");
-  // }
 
   const Product = await require('../models/product');
   const newProduct = new Product({
