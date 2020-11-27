@@ -39,7 +39,7 @@ const viewOrder = async (response, orderId) => {
  */
 const viewOrdersByCustomer = async (response, cId) => {
     const Order = await require("../models/order");
-    const orderData = await Order.find({customerId : cId}).exec();
+    const orderData = await Order.find({customerId : cId});
     return responseUtils.sendJson(response, orderData);
 };
 

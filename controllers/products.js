@@ -82,18 +82,19 @@ const updateProduct = async (response, productId, productData) => {
   if (!fProduct){
     return responseUtils.notFound(response);
   }
-  
-  Object.entries(productData).forEach((key, value) => {
-    fProduct[key] = value;
-  });
+  if (fProduct)
+  fProduct.name = productData.name;
+  fProduct.price = productData.price;
+  if (productData.description !== undefined) { 
+    fProduct.description = productData.description;
+  }
+  if (productData.image !== undefined) {
+    fProduct.image = productData.image;
+  }
 
   await fProduct.save();
   
-  productData = {
-    '_id': productId,
-    ...productData
-  };
-  return responseUtils.sendJson(response, productData);
+  return responseUtils.sendJson(response, fProduct);
 };
 
 /**
