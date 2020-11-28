@@ -145,6 +145,11 @@ describe('Routes', () => {
         expect(response).to.have.status(204);
       });
 
+      it('should respond with "404 Not Found" to an OPTIONS request with wrong url', async () => {
+        const response = await chai.request(handleRequest).options('/api/something');
+        expect(response).to.have.status(404);
+      });
+
       it('should respond with correct Allow headers to an OPTIONS request', async () => {
         const response = await chai.request(handleRequest).options(usersUrl);
 
