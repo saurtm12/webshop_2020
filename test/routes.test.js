@@ -118,7 +118,6 @@ describe('Routes', () => {
   });
 
   describe('handleRequest()', () => {
-    describe('General Server Functionality', () => {
       it('should respond with "404 Not Found" to an unknown URI', async () => {
         for (const url of unknownUrls) {
           const response = await chai.request(handleRequest).get(url);
@@ -1859,6 +1858,24 @@ describe('Routes', () => {
         expect(createdOrder).to.not.be.null;
         expect(createdOrder).to.be.an('object');
         expect(response.body).to.deep.equal(orderData);
+      });
+
+      it('should respond with "400 Bad Request" when items is empty', async () => {
+        const order = {
+          "items": []
+        };
+
+        const response = await chai
+          .request(handleRequest)
+          .post(ordersUrl)
+          .set('Accept', contentType)
+          .set('Authorization', `Basic ${customerCredentials}`)
+          .send(order);
+
+        expect(response).to.have.status(400);
+        expect(response).to.be.json;
+        expect(response.body).to.be.an('object');
+        expect(response.body).to.have.property('error');
       });
     });
   });

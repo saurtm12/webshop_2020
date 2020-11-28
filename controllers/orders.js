@@ -51,9 +51,6 @@ const viewOrdersByCustomer = async (response, cId) => {
  * @returns {object} response
  */
 const registerOrder = async (response, orderData, cId) => {
-    if (!orderData){
-        return responseUtils.badRequest(response, "Body order is empty");
-    }
     
     if (orderData.items.length < 1){
         return responseUtils.badRequest(response, "Order is empty");

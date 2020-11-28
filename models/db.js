@@ -59,4 +59,4 @@ function disconnectDB () {
   mongoose.disconnect();
 }
 
-module.exports = { connectDB, disconnectDB, getDbUrl };
+module.exports = { connectDB, disconnectDB, getDbUrl, handleCriticalError };

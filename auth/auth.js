@@ -1,4 +1,3 @@
-const {getUser} = require('../utils/users');
 const {getCredentials} = require('../utils/requestUtils');
 const User = require('../models/user');
 

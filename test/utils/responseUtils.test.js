@@ -129,4 +129,12 @@ describe('Response Utils', () => {
       expect(response.statusCode).to.equal(500);
     });
   });
+
+  describe('redirectToPage()', () => {
+    it('should set response status to 302', () => {
+      const response = createResponse();
+      responseUtils.redirectToPage(response, { Location: 'location'});
+      expect(response.statusCode).to.equal(302);
+    });
+  });
 });

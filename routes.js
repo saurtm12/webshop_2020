@@ -1,7 +1,6 @@
 const responseUtils = require('./utils/responseUtils');
 const { acceptsJson, isJson, parseBodyJson, getCredentials} = require('./utils/requestUtils');
 const { renderPublic } = require('./utils/render');
-const { emailInUse, saveNewUser, validateUser, generateId, getUser, getUserById, updateUserRole, deleteUserById } = require('./utils/users');
 const fs = require('fs');
 const { sendJson, basicAuthChallenge} = require('./utils/responseUtils');
 const { getCurrentUser } = require('./auth/auth');
