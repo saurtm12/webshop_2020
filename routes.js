@@ -37,8 +37,6 @@ const sendOptions = (filePath, response) => {
     });
     return response.end();
   }
-
-  return responseUtils.notFound(response);
 };
 
 /**
