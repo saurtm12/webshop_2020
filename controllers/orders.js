@@ -1,4 +1,3 @@
-const { interfaces } = require('mocha');
 const responseUtils = require('../utils/responseUtils');
 
 /**
