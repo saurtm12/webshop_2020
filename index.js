@@ -2,7 +2,9 @@ const http = require('http');
 const { handleRequest } = require('./routes');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/Test_WebShopDb', {useNewUrlParser: true}, { useUnifiedTopology: true } );
+const url = process.env.DBURL || 'mongodb://localhost:27017/Test_WebShopDb';
+
+mongoose.connect(url, {useNewUrlParser: true}, { useUnifiedTopology: true } );
 const db = mongoose.connection;
 
 //Bind connection to error event (to get notification of connection errors)
