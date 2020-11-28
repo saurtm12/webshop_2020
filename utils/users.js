@@ -38,7 +38,6 @@ const resetUsers = () => {
  * @returns {string} ID as string
  */
 const generateId = () => {
-  let id;
   const giveId = () => {
     const id = Math.random().toString(36).substr(2, 9);
     if (data.users.some(u => u._id === id)){
