@@ -117,3 +117,27 @@ button:hover {
 .background-red {
   background-color: red;
 }
+
+.modify-button {
+  color:black;
+}
+
+.delete-button {
+  color: black;
+}
+
+.register-button {
+  color: black;
+}
+
+.update-button {
+  color: black;
+}
+
+.addToCart-button {
+  color: black;
+}
+
+.placeOrder-button {
+  color: black;
+}

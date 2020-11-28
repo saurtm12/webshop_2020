@@ -5,7 +5,7 @@
  *         (notice the id attributes and values, replace "{userId}" with the actual user id)
  *
  *         <div class="item-row" id="user-{userId}">
- *           <h3 class="user-name" id="name-{userId}">Admin</h3>
+ *           <h2 class="user-name" id="name-{userId}">Admin</h2>
  *           <p class="user-email" id="email-{userId}">admin@email.com</p>
  *           <p class="user-role" id="role-{userId}">admin</p>
  *           <button class="modify-button" id="modify-{userId}">Modify</button>
@@ -42,7 +42,7 @@ window.onload = function() {
         const template = document.getElementById("user-template");
         users.map(user => {
             const clone = template.content.cloneNode(true);
-            const id = clone.querySelector("h3");
+            const id = clone.querySelector("h2");
             const email = clone.querySelector("p");
             const role = clone.querySelectorAll("p")[1];
             const modifyButton = clone.querySelector("button");
@@ -149,12 +149,13 @@ function modify(event){
 
     const button = clone.getElementById("update-button");
     button.type = "button";
+    button.classList.add("update-button");
 
     button.addEventListener('click', function(event){
         const rows = document.getElementById("users-container").getElementsByClassName("item-row");
         const rowsObject = Object.values(rows);
         rowsObject.map(row => {
-            const header = row.querySelector("h3");
+            const header = row.querySelector("h2");
             const email = row.querySelector("p");
             const role = row.querySelectorAll("p")[1];
             if(header.id.includes(userId)) {

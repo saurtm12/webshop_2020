@@ -17,6 +17,7 @@ getJSON("/api/products").then(products => {
         price.id = `price-${product._id}`;
 
         button.id = `add-to-cart-${product._id}`;
+        button.classList.add('addToCart-button');
 
         const id = product._id
 
