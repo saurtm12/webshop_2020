@@ -119,9 +119,6 @@ const handleRequest = async (request, response) => {
         return await viewProduct(response, productId);
       }
       if (method.toUpperCase() === 'PUT') {
-        if (authorizedUser === null) {
-          return basicAuthChallenge(response);
-        }
         if (authorizedUser.role === 'customer') {
           return responseUtils.forbidden(response);
         }
@@ -129,9 +126,6 @@ const handleRequest = async (request, response) => {
         return await updateProduct(response, productId, body);
       }
       if (method.toUpperCase() === 'DELETE') {
-        if (authorizedUser === null) {
-          return basicAuthChallenge(response);
-        }
         if (authorizedUser.role === 'customer') {
           return responseUtils.forbidden(response);
         }
@@ -285,10 +279,6 @@ const handleRequest = async (request, response) => {
   }
   if (filePath === '/api/orders' && method.toUpperCase() === 'POST') {
     if(!request.headers.authorization) {
-      return responseUtils.basicAuthChallenge(response);
-    }
-    const authHeadersArray = request.headers.authorization.split(" ");
-    if(Buffer.from(authHeadersArray[1], 'base64').toString('base64') !== authHeadersArray[1]) {
       return responseUtils.basicAuthChallenge(response);
     }
     const current = await getCurrentUser(request);
