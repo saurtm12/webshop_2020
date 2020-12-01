@@ -3,7 +3,7 @@
 Member1:  Teemu Loijas, teemu.loijas@tuni.fi, 050090837, 
 resposible for: TODO, short description of duties 
 
-Member2:  name, email, student ID, 
+Member2:  Nghia Duc Hong, duc.hong@tuni.fi, H292119, 
 resposible for: TODO, short description of duties 
 
 
