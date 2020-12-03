@@ -13,7 +13,7 @@ const NOT_FOUND_TEMPLATE = path.resolve(__dirname, '../public/404.html');
 const renderPublic = (filePath, response) => {
   if (!filePath) return renderNotFound(response);
 
-  const [filename, ext] = splitPath(filePath);
+  const ext = splitPath(filePath)[1];
   const contentType = getContentType(ext);
   const fullPath = getFullFilePath(filePath);
 
@@ -38,7 +38,7 @@ const renderNotFound = response => {
  * @returns {string} contentType
  */
 const getContentType = fileExtension => {
-  let contentType = 'text/html';
+  let contentType;
 
   switch (fileExtension.toLowerCase().replace('.', '')) {
     case 'js':

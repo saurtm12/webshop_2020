@@ -83,6 +83,7 @@ function placeOrder() {
     const divsObject = Object.values(divs);
     divsObject.map(d => {
         d.parentNode.parentNode.removeChild(d.parentNode);
+        return d;
     });
     sessionStorage.clear();
 }

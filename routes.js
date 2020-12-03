@@ -137,7 +137,6 @@ const handleRequest = async (request, response) => {
   if (matchUserId(filePath)) {
     // TODO: 8.5 Implement view, update and delete a single user by ID (GET, PUT, DELETE)
     // You can use parseBodyJson(request) from utils/requestUtils.js to parse request body
-    const authorization = headers.authorization;
     const credential = getCredentials(request);
     const id = filePath.split('/')[3];
     if (credential !== null) {

@@ -95,7 +95,7 @@ function modify(event){
         if(innerId.includes(userId)){
             name = username.innerHTML;
         }
-        return;
+        return username;
     });
     const userEmailsObject = Object.values(userEmails);
     userEmailsObject.map(uEmail => {
@@ -103,7 +103,7 @@ function modify(event){
         if(innerId.includes(userId)){
             email = uEmail.innerHTML;
         }
-        return;
+        return uEmail;
     });
     const userRolesObject = Object.values(userRoles);
     userRolesObject.map(uRole => {
@@ -111,7 +111,7 @@ function modify(event){
         if(innerId.includes(userId)){
             role = uRole.innerHTML;
         }
-        return;
+        return uRole;
     });
 
     const modifyUserContainer = document.getElementById("modify-user");
@@ -154,7 +154,7 @@ function modify(event){
     button.type = "button";
     button.classList.add("update-button");
 
-    button.addEventListener('click', function(event){
+    button.addEventListener('click', function(){
         const rows = document.getElementById("users-container").getElementsByClassName("item-row");
         const rowsObject = Object.values(rows);
         rowsObject.map(row => {
@@ -166,7 +166,7 @@ function modify(event){
                 rowEmail.innerHTML = emailInput.value;
                 rowRole.innerHTML = myRole;
             }
-            return;
+            return row;
         });
         submitForm(event, nameInput.value);
         const userData = {
@@ -209,7 +209,7 @@ function remove(event) {
         if(userId.includes(parsedId[1])){
             name = username.innerHTML;
         }
-        return;
+        return username;
     });
     deleteResourse(`/api/users/${ parsedId[1]}` );
     createNotification(`Deleted user ${name}`, "notifications-container", true);
