@@ -42,7 +42,7 @@ window.onload = function() {
         const template = document.getElementById("user-template");
         users.map(user => {
             const clone = template.content.cloneNode(true);
-            const id = clone.querySelector("h2");
+            const id = clone.querySelector("h3");
             const email = clone.querySelector("p");
             const role = clone.querySelectorAll("p")[1];
             const modifyButton = clone.querySelector("button");
@@ -158,7 +158,7 @@ function modify(event){
         const rows = document.getElementById("users-container").getElementsByClassName("item-row");
         const rowsObject = Object.values(rows);
         rowsObject.map(row => {
-            const rowHeader = row.querySelector("h2");
+            const rowHeader = row.querySelector("h3");
             const rowEmail = row.querySelector("p");
             const rowRole = row.querySelectorAll("p")[1];
             if(rowHeader.id.includes(userId)) {

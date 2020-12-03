@@ -150,7 +150,7 @@ describe('User Inteface', () => {
 
       // navigate to "/users.html" and check to see if the new user can be found
       await page.goto(usersPage, { waitUntil: 'networkidle0' });
-      const nameElement = await page.$x(`//h2[contains(., '${newCustomer.name}')]`);
+      const nameElement = await page.$x(`//h3[contains(., '${newCustomer.name}')]`);
       let nameText = '';
 
       try {
