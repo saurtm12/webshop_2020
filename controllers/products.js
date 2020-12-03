@@ -82,9 +82,10 @@ const updateProduct = async (response, productId, productData) => {
   if (!fProduct){
     return responseUtils.notFound(response);
   }
-  if (fProduct)
-  fProduct.name = productData.name;
-  fProduct.price = productData.price;
+  if (fProduct){
+    fProduct.name = productData.name;
+    fProduct.price = productData.price;
+  }
   if (productData.description !== undefined) { 
     fProduct.description = productData.description;
   }

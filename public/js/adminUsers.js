@@ -95,6 +95,7 @@ function modify(event){
         if(innerId.includes(userId)){
             name = username.innerHTML;
         }
+        return;
     });
     const userEmailsObject = Object.values(userEmails);
     userEmailsObject.map(uEmail => {
@@ -102,6 +103,7 @@ function modify(event){
         if(innerId.includes(userId)){
             email = uEmail.innerHTML;
         }
+        return;
     });
     const userRolesObject = Object.values(userRoles);
     userRolesObject.map(uRole => {
@@ -109,6 +111,7 @@ function modify(event){
         if(innerId.includes(userId)){
             role = uRole.innerHTML;
         }
+        return;
     });
 
     const modifyUserContainer = document.getElementById("modify-user");
@@ -155,14 +158,15 @@ function modify(event){
         const rows = document.getElementById("users-container").getElementsByClassName("item-row");
         const rowsObject = Object.values(rows);
         rowsObject.map(row => {
-            const header = row.querySelector("h2");
-            const email = row.querySelector("p");
-            const role = row.querySelectorAll("p")[1];
-            if(header.id.includes(userId)) {
-                header.innerHTML = nameInput.value;
-                email.innerHTML = emailInput.value;
-                role.innerHTML = myRole;
+            const rowHeader = row.querySelector("h2");
+            const rowEmail = row.querySelector("p");
+            const rowRole = row.querySelectorAll("p")[1];
+            if(rowHeader.id.includes(userId)) {
+                rowHeader.innerHTML = nameInput.value;
+                rowEmail.innerHTML = emailInput.value;
+                rowRole.innerHTML = myRole;
             }
+            return;
         });
         submitForm(event, nameInput.value);
         const userData = {
@@ -205,6 +209,7 @@ function remove(event) {
         if(userId.includes(parsedId[1])){
             name = username.innerHTML;
         }
+        return;
     });
     deleteResourse(`/api/users/${ parsedId[1]}` );
     createNotification(`Deleted user ${name}`, "notifications-container", true);
