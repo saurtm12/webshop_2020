@@ -2,7 +2,8 @@ const sessionStorageItems = {...sessionStorage};
 
 const template = document.getElementById("cart-item-template");
 
-document.getElementById("place-order-button").addEventListener('click', function(event){
+document.getElementById("place-order-button").addEventListener('click', async function(event){
+    event.preventDefault();
     placeOrder();
 })
 const sessionStorageObject = Object.values(sessionStorageItems);
@@ -76,14 +77,10 @@ function removeProduct(id, amountParagraph) {
  * Place order.
  *
  */
-function placeOrder() {
+async function placeOrder() {
+    await sendNewOrder();
     createNotification("Successfully created an order!", "notifications-container", true);
-    removeElement("cart-container", "item-row");
-    const divs = document.getElementsByClassName("item-row");
-    const divsObject = Object.values(divs);
-    divsObject.map(d => {
-        d.parentNode.parentNode.removeChild(d.parentNode);
-        return d;
-    });
+    const cartContainer = document.getElementById('cart-container');
+    cartContainer.innerHTML = "";
     sessionStorage.clear();
 }

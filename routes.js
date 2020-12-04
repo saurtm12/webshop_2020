@@ -260,15 +260,10 @@ const handleRequest = async (request, response) => {
     if(!request.headers.authorization) {
       return responseUtils.basicAuthChallenge(response);
     }
-    const authHeadersArray = request.headers.authorization.split(" ");
-    if(Buffer.from(authHeadersArray[1], 'base64').toString('base64') !== authHeadersArray[1]) {
-      return responseUtils.basicAuthChallenge(response);
-    }
     const current = await getCurrentUser(request);
     if(current === null) {
       return responseUtils.basicAuthChallenge(response);
     }
-
     if(current.role === 'customer') {
       return orderController.viewOrdersByCustomer(response, current._id );
     }

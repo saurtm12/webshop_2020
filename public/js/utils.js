@@ -51,7 +51,7 @@ const postOrPutJSON = async (url, method, data = {}) => {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: data
+    body: JSON.stringify(data)
   }).then(res => {
     return res;
   });
@@ -138,3 +138,26 @@ const removeElement = (containerId, elementId) => {
   const container = document.getElementById(containerId);
   container.querySelectorAll(`#${elementId}`).forEach(element => element.remove());
 };
+
+/**
+ * Constructor Item product
+ * @param {object} product
+ */
+function Item(product) {
+  this.product = {
+    "_id": product._id,
+    "name": product.name,
+    "price": product.price,
+    "description": product.description
+  };
+  this.quantity = product.amount;
+}
+
+
+const sendNewOrder = async () => {
+  const orderItems = Object.values(sessionStorage).map(value => JSON.parse(value)).map(p => new Item(p));
+  if (orderItems.length >= 1) {
+    const newOrder = {items: orderItems};
+    postOrPutJSON("/api/orders", "POST", newOrder);
+  }
+}
