@@ -8,11 +8,14 @@ const loadOrders = async () => {
     orderInfo.forEach( item => {
         const cloneDiv = ordersTemplate.content.cloneNode(true);
         const orderRow = cloneDiv.querySelector(".order-row");
-
         orderRow.setAttribute("id", `order-${item._id}`);
 
+        const idRow = document.createElement("h1");
+        idRow.textContent = `Order Id : ${item._id}`;
+        idRow.setAttribute('style', 'color:red');
+        orderRow.appendChild(idRow);
+
         item.items.forEach( i => {
-            console.log(i);
             const cloneDivProduct = productTemplate.content.cloneNode(true);
             const itemrow = cloneDivProduct.querySelector(".item-row");
             const productName = cloneDivProduct.querySelector(".product-name");
@@ -29,7 +32,7 @@ const loadOrders = async () => {
 
             productName.textContent = productInfo.name;
             description.textContent = productInfo.description;
-            price.textContent = productInfo.price;
+            price.textContent = productInfo.price.$numberDecimal;
             quantity.textContent = i.quantity;
 
             orderRow.appendChild(itemrow);
