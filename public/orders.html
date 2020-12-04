@@ -17,25 +17,34 @@
           <li><a href="users.html">List Users</a></li>
           <li><a href="products.html">List Products</a></li>
           <li><a href="cart.html">Shopping Cart</a></li>
+          <li><a href="orders.html">Orders</a></li>
         </ul>
       </nav>
     </header>
     <main>
-      <h1>Products</h1>
+      <h1>Orders</h1>
       <div id="notifications-container"></div>
-      <div id="products-container"></div>
+      <div id="modify-product"></div>
+      <div id="orders-container"></div>
     </main>
     <footer>
       <p>Copyright &copy; 2020 diipadaa etc etc.</p>
     </footer>
+
     <template id="order-template">
-      <div class="item-row">
-        <h3 class="product-name"></h3>
-        <p class="product-description"></p>
-        <p class="product-price"></p>
-        <button>Add to cart</button>
+      <div class="order-row">
       </div>
     </template>
+
+    <template id="product-template">
+      <div class="item-row">
+          <h3 class="product-name">Name</h3>
+          <p class="product-description">Description</p>
+          <p class="product-price">Price</p>
+          <p class="product-quantity">Quantity</p>
+      </div>
+    </template>
+
     <script src="js/utils.js"></script>
     <script src="js/orders.js"></script>
   </body>
