@@ -3,27 +3,29 @@ const Schema = mongoose.Schema;
 const Product = require('./product');
 
 const orderedItemSchema = new Schema({
-    product: {
-        type: Schema.ObjectId, ref: 'Product'
-        // _id: {
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: 'Product',
-        //     required: true,
-        // },
-        // name: {
-        //     type: String,
-        //     minlength: 1,
-        //     required: true,
-        //     trim: true
-        // },
-        // price: {
-        //     type: Number,
-        //     required: true,
-        //     description: "price of one product in Euros, without the Euro sign (€). Euros and cents are in the same float, with cents coming after the decimal point",
-        //     validate: function() {
-        //         return this.product.price > 0;
-        //     }
-        // }
+    product : {
+        _id : { 
+            type : mongoose.Schema.Types.ObjectId,
+            ref : 'Product',
+            required : true,
+            trim : true
+        },
+        name : {
+            type : String, 
+            minlength : 1, 
+            required : true,
+            trim : true
+        },
+        description : {
+            type : String, 
+            trim : true
+          },
+        price : {
+            type : mongoose.Types.Decimal128,
+            required : true,
+            description : "price of one product in Euros, without the Euro sign (€). Euros and cents are in the same float, with cents coming after the decimal point",
+            validate : function() {return this.product.price > 0;}
+        }
     },
     quantity: {
         type: Number,
