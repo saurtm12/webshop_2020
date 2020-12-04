@@ -51,7 +51,7 @@ const postOrPutJSON = async (url, method, data = {}) => {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(data)
+    body: data
   }).then(res => {
     return res;
   });
@@ -158,6 +158,6 @@ const sendNewOrder = async () => {
   const orderItems = Object.values(sessionStorage).map(value => JSON.parse(value)).map(p => new Item(p));
   if (orderItems.length >= 1) {
     const newOrder = {items: orderItems};
-    postOrPutJSON("/api/orders", "POST", newOrder);
+    postOrPutJSON("/api/orders", "POST", JSON.stringify(newOrder));
   }
 }
