@@ -59,8 +59,10 @@ This Vanilla web app project is done based on MVC structure. In this structure, 
 The models are implemented in /Model/* as the database for the web shop, with 3 database schemas : User, Product, and Order. 
 The controller is implemented in folder /controllers/
 View are implemented by HTML files and javascripts file in /public/
+The system is designed to support REST api with necessary access right based on role of user.
 2. Diagram
-
+    - Structure Diagram : /public/img/MVC_structure_diagram.jpg
+    - Navigation Diagram: /public/img/navDia.jpg
 3. Data Models:
     - User:
         - Model: User
