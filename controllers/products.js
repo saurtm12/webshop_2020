@@ -79,10 +79,11 @@ const updateProduct = async (response, productId, productData) => {
   const Product = await require('../models/product');
   const fProduct = await Product.findById(productId).exec();
 
-  if (!fProduct){
+  if (!fProduct) {
     return responseUtils.notFound(response);
   }
-  if (fProduct){
+
+  if (fProduct) {
     fProduct.name = productData.name;
     fProduct.price = productData.price;
   }

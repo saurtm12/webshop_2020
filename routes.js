@@ -265,7 +265,6 @@ const handleRequest = async (request, response) => {
       return responseUtils.basicAuthChallenge(response);
     }
     if(current.role === 'customer') {
-      console.log("VIEW ORDERS BY CUSTOMER ROLE");
       return orderController.viewOrdersByCustomer(response, current._id );
     }
     return orderController.getAllOrders(response);
