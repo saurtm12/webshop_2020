@@ -1,3 +1,6 @@
+/**
+ * Event handler when an admin add a new product to the system
+ */
 document.getElementById("addProductButton").addEventListener("click", event => {
     event.preventDefault();
     const name = document.querySelector("#name").value;

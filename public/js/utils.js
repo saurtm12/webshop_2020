@@ -141,7 +141,8 @@ const removeElement = (containerId, elementId) => {
 
 /**
  * Constructor Item product
- * @param {object} product
+ * @param {object} product object from session Storage
+ * @return {object} Item object
  */
 function Item(product) {
   this.product = {
@@ -153,7 +154,10 @@ function Item(product) {
   this.quantity = product.amount;
 }
 
-
+/**
+ * Send A new order from customer
+ * 
+ */
 const sendNewOrder = async () => {
   const orderItems = Object.values(sessionStorage).map(value => JSON.parse(value)).map(p => new Item(p));
   if (orderItems.length >= 1) {

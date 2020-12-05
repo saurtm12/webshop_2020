@@ -4,7 +4,7 @@ Member1:  Teemu Loijas, teemu.loijas@tuni.fi, 050090837,
 resposible for: - Handle all API in routes
                 - Write jsdocs
                 - Sonarqube coverage
-                - Accesibility
+                - Accessibility
                 - FrontEnd: add to cart 
                 - FrontEnd: shopping cart list
                 - FrontEnd: increament item in cart
