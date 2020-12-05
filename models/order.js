@@ -38,7 +38,7 @@ const orderSchema = new Schema({
     customerId: {
         type : mongoose.Schema.Types.ObjectId,
         ref : 'User',
-        required : true,
+        require: true,
         trim : true
     },
     items: {
@@ -49,8 +49,8 @@ const orderSchema = new Schema({
 });
 
 orderSchema.set('toJSON', { virtuals: false, versionKey: false});
-orderSchema.set('autoIndex', false);
 orderedItemSchema.set('toJSON', { virtuals: false, versionKey: false});
+orderedItemSchema.set('autoIndex', false);
 orderSchema.set('autoIndex', false);
 
 const Order = new mongoose.model('Order', orderSchema);

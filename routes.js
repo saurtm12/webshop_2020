@@ -285,7 +285,7 @@ const handleRequest = async (request, response) => {
       return responseUtils.badRequest(response, 'Invalid Content-Type. Expected application/json');
     }
     const body = await parseBodyJson(request);
-    return await orderController.registerOrder(response, body);
+    return await orderController.registerOrder(response, body, current._id);
   }
 };
 

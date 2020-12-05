@@ -1,4 +1,5 @@
 const responseUtils = require('../utils/responseUtils');
+const mongoose = require('mongoose');
 
 /**
  * get all orders and send json (with admin)
@@ -61,7 +62,10 @@ const registerOrder = async (response, orderData, cId) => {
     }
     const Order = await require("../models/order");
 
-    const newOrder = new Order({customerId : orderData.items[0].product["_id"], ...orderData});
+    const newOrder = new Order({
+        customerId : cId,
+        items: orderData.items
+    });
     await newOrder.save();
     return responseUtils.createdResource(response, newOrder);
 };
