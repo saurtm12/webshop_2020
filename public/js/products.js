@@ -8,7 +8,7 @@ getJSON("/api/products").then(products => {
         const button = clone.querySelector("button");
 
         name.innerHTML = product.name;
-        name.id = `name-${product._id}`
+        name.id = `name-${product._id}`;
 
         description.innerHTML = product.description;
         description.id = `description-${product._id}`;
