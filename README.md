@@ -80,7 +80,18 @@ The system is designed to support REST api with necessary access right based on 
 
 ## Tests and documentation
 
-TODO: Links to at least 10 of your group's GitLab issues, and their associated Mocha tests and test files.
+### Tests
+We've only created a few extra test cases since the test cases from course side were comprehensive enough. We've added the test cases in to the same files where the course side tests are. The reason for adding them in to the same files is to decrease the usage of same kind of code. All the test files need same kind of constants to run correctly and there's no time for refactoring.
+
+Files:
+    /test/utils/responseUtils.test.js
+    /test/routes.test.js
+    /test/controllers/products.test.js
+
+
+### Gitlab issues
+    The gitlab board contains all the issues we've created.
+    https://course-gitlab.tuni.fi/webdev1-2020-2021/webdev1-group-68/-/boards
 
 ## Security concerns
 - Input Data : User input should not never be truested. Our user input is validated, handled by scripts. 
