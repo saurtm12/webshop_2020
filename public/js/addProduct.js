@@ -22,7 +22,7 @@ document.getElementById("addProductButton").addEventListener("click", event => {
         image: image,
         price: Number(price)
     };
-    postOrPutJSON("/api/products", "POST", newProduct).then(response => {
+    postOrPutJSON("/api/products", "POST", JSON.stringify(newProduct)).then(response => {
         console.log(response);
         if (!response) {
             createNotification("Add product success", "notifications-container", true);
