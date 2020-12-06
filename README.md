@@ -17,6 +17,14 @@ resposible for: - Data model schemas : Product / Oder
                 - frontEnd: request for adding an product.
                 - Write documentations/UML diagram.
 
+### Login credentials
+    Customer:
+        Username: customer@email.com
+        Password: 0987654321
+
+    Admin:
+        Username: admin@email.com
+        Password: 1234567890
 
 ### The project structure
 
