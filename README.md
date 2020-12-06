@@ -18,6 +18,7 @@ resposible for: - Data model schemas : Product / Oder
                 - Write documentations/UML diagram.
 
 ### Login credentials
+    Link: https://webdev-webshop1.herokuapp.com/
     Customer:
         Username: customer@email.com
         Password: 0987654321
